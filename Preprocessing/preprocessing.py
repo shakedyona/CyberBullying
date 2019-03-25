@@ -64,6 +64,15 @@ def extract_topn_from_vector(feature_names, sorted_items, topn=10):
     return results
 
 
+def preprocess(df):
+    """
+    get a dataframe - clean and preprocess its data and return the result dataframe
+    :param df: dataframe
+    :return clean_df: dataframe
+    """
+    pass
+
+
 def remove_stop_words(data_frame, my_stop_words):
     """
     tokenize all the words in the data frame and removes stop words
