@@ -1,10 +1,12 @@
 from nltk.tokenize import word_tokenize
 import utils
+import collections
 from collections import Counter
 import re
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
 from sklearn.feature_extraction.text import CountVectorizer
+import pandas as pd
 
 
 def create_tf_idf(dataframe, num_of_words):
