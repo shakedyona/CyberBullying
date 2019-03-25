@@ -104,7 +104,7 @@ def get_stop_words():
     gets list of stop words from a file
     :return:
     """
-    stop_words = utils.file_to_list(r'stop_words.txt')
+    stop_words = utils.file_to_list(r'..\stop_words.txt')
     return stop_words
 
 
