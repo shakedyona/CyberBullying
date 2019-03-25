@@ -1,10 +1,10 @@
-from nltk.tokenize import word_tokenize
-import utils
-from collections import Counter
-import re
-from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
 from sklearn.feature_extraction.text import CountVectorizer
+import collections
+import Preprocessing.preprocessing as preprocessing
+from nltk.tokenize import word_tokenize
+import pandas as pd
+import utils
 
 
 def create_tf_idf(dataframe, num_of_words):
@@ -18,7 +18,7 @@ def create_tf_idf(dataframe, num_of_words):
     posts = dataframe['text'].tolist()
     dict = {}
     # create a vocabulary of words,
-    cv = CountVectorizer(max_df=0.85, stop_words=get_stop_words())
+    cv = CountVectorizer(max_df=0.85, stop_words=preprocessing.get_stop_words())
     word_count_vector = cv.fit_transform(posts)
     tfidf_transformer = TfidfTransformer(smooth_idf=True, use_idf=True)
     tfidf_transformer.fit(word_count_vector)
@@ -64,49 +64,6 @@ def extract_topn_from_vector(feature_names, sorted_items, topn=10):
     return results
 
 
-def remove_stop_words(data_frame, my_stop_words):
-    """
-    tokenize all the words in the data frame and removes stop words
-    :param data_frame:
-    :param my_stop_words:
-    :return: dictionary of words and their number of performances
-    """
-    # print("remove_stop_words")
-    text = data_frame.text.tolist()
-    all_words = " ".join(text)
-    all_words = word_tokenize(all_words)
-    for word in my_stop_words:
-        if word in all_words:
-            all_words.remove(word)
-
-    top_words = dict(Counter(all_words))
-    return top_words
-
-# todo:
-
-def clean_tokens(df):
-    """
-    clean all non-Hebrew characters from a given data frame.
-    :param df:
-    :return:
-    """
-    text = df.text.tolist()
-    number_posts = len(text)
-    for index_post in range(1, number_posts):
-        text[index_post] = re.sub(r'[^א-ת]', ' ', text[index_post]).strip().rstrip()
-    return text
-
-
-def get_stop_words():
-    """
-    gets list of stop words from a file
-    :return:
-    """
-    stop_words = utils.file_to_list(r'stop_words.txt')
-    return stop_words
-
-
-######################### statistics ################################
 def get_common_words(dataframe, number):
     """
     returns a dictionary of the most frequent words as keys and
@@ -116,8 +73,12 @@ def get_common_words(dataframe, number):
     :param number:
     :return:
     """
-    stop_words = get_stop_words()
-    tokens = tokenize_df(dataframe)
+    stop_words = preprocessing.get_stop_words()
+    text = dataframe.text.tolist()
+    tokens = []
+    for post in text:
+        tokens = tokens + word_tokenize(post)
+
     word_frequency = {}
 
     for word in tokens:
@@ -133,31 +94,8 @@ def get_common_words(dataframe, number):
     return most_common_dictionary
 
 
-def tokenize_df(df):
-    """
-    tokenize all the words in the dataframe
-    :param df:
-    :return list of tokens:
-    """
-    text = df.text.tolist()
-    tokens = []
-    for post in text:
-        tokens = tokens + word_tokenize(post)
-
-    return tokens
-
-
-def tokenize_post(post):
-    """
-    tokenize only one post
-    :param post:
-    :return list of tokens:
-    """
-    return word_tokenize(post)
-
-
 def find_df(dataframe, threshold):
-    stop_words = get_stop_words()
+    stop_words = preprocessing.get_stop_words()
     text = dataframe.text.tolist()
     term_df = {}
     number_posts = len(text)
@@ -206,7 +144,6 @@ def num_of_abusive_per_column(df, column_name):
     total_from_corpus_df = df.groupby(column_name)['cb_level'].apply(lambda x: (x.count() / df.shape[0]))
     number_of_abusive_df = df.groupby(column_name)['cb_level'].apply(lambda x: x[x == '3'].count())
     normalized_abusive_df = df.groupby(column_name)['cb_level'].apply(lambda x: (x[x == '3'].count() / x.count()) * 100)
-
 
     result = pd.DataFrame({'total_count': total_count_df})\
         .merge(pd.DataFrame({'total_from_corpus': total_from_corpus_df}), on=[column_name], right_index=True)
