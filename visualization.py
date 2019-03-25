@@ -46,3 +46,10 @@ def print_tf_idf_dict(tf_idf_dict):
         for v in value:
             print('word: ' + str(v[0]) + ', tf-idf: ' + str(v[1]))
 
+
+def plot_part_of_day(dictionary_time, title, unique=False):
+    df2 = pd.DataFrame.from_dict(dictionary_time, orient='index').sort_values(by=0, ascending=False)
+    pl = df2.plot(kind='bar', figsize=(15, 7), fontsize=8, legend=False, title=utils.traverse(title))
+    for p in pl.patches:
+        pl.annotate(str(p.get_height()), (p.get_x() * 0.98, p.get_height() * 1.001), fontsize=14)
+    plt.show()
