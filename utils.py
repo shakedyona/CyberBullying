@@ -1,5 +1,5 @@
 import pandas as pd
-
+from nltk.tokenize import word_tokenize
 
 def get_abusive_df(df):
     return df.loc[df['cb_level'] == '3']
@@ -45,6 +45,45 @@ def traverse(word):
     elif type(word) == type(type(pd.DataFrame())): return word.applymap(lambda x: traverse(x))
     return word
 
+def get_stop_words():
+    """
+    gets list of stop words from a file
+    :return:
+    """
+    stop_words = file_to_list(r'stop_words.txt')
+    return stop_words
+
+
+def create_stop_words_list(dataframe, threshold):
+    """
+    create list of frequent words according to a given threshold
+    :param dataframe: dataframe
+    :param threshold: double
+    :return stop_words: list
+    """
+    stop_words = get_stop_words()
+    text = dataframe.text.tolist()
+    term_df = {}
+    number_posts = len(text)
+
+    for index_post in range(1, number_posts):
+        tokens = word_tokenize(text[index_post])
+        for token in tokens:
+            if token in term_df:
+                list_posts = term_df[token]
+                if index_post not in list_posts:
+                    term_df[token].append(index_post)  # todo: change from indexes to counter
+            else:
+                term_df[token] = []
+                term_df[token].append(index_post)
+
+    for token, posts in term_df.items():
+        df = len(posts)
+        df_normal = float(df / number_posts)
+        if df_normal > threshold:
+            stop_words.append(token)
+
+    return stop_words
 
 # def read_csv_to_df(path):
     # column_names = []
