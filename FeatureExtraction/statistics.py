@@ -74,11 +74,7 @@ def get_common_words(dataframe, number):
     :return:
     """
     stop_words = preprocessing.get_stop_words()
-    text = dataframe.text.tolist()
-    tokens = []
-    for post in text:
-        tokens = tokens + word_tokenize(post)
-
+    tokens = preprocessing.tokenize_df(dataframe)
     word_frequency = {}
 
     for word in tokens:
