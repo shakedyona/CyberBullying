@@ -67,12 +67,12 @@ def extract_topn_from_vector(feature_names, sorted_items, topn=10):
 
 def remove_stop_words(data_frame, my_stop_words):
     """
-    removes stop words
+    tokenize all the words in the data frame and removes stop words
     :param data_frame:
     :param my_stop_words:
-    :return:
+    :return: dictionary of words and their number of performances
     """
-    print("remove_stop_words")
+    # print("remove_stop_words")
     text = data_frame.text.tolist()
     all_words = " ".join(text)
     all_words = word_tokenize(all_words)
@@ -83,11 +83,11 @@ def remove_stop_words(data_frame, my_stop_words):
     top_words = dict(Counter(all_words))
     return top_words
 
-
+# todo:
 
 def clean_tokens(df):
     """
-    clean all non-Hebrew characters from a given dataframe.
+    clean all non-Hebrew characters from a given data frame.
     :param df:
     :return:
     """
@@ -103,7 +103,7 @@ def get_stop_words():
     gets list of stop words from a file
     :return:
     """
-    stop_words = utils.file_to_list(r'C:\Users\shake\Desktop\לימודים\פרויקט בריונות ברשת\stop_words.txt')
+    stop_words = utils.file_to_list(r'stop_words.txt')
     return stop_words
 
 
@@ -118,11 +118,7 @@ def get_common_words(dataframe, number):
     :return:
     """
     stop_words = get_stop_words()
-    text = dataframe.text.tolist()
-    tokens = []
-    for post in text:
-        tokens = tokens + word_tokenize(post)
-
+    tokens = tokenize_df(dataframe)
     word_frequency = {}
 
     for word in tokens:
@@ -138,7 +134,30 @@ def get_common_words(dataframe, number):
     return most_common_dictionary
 
 
-def find_df(dataframe,threshold):
+def tokenize_df(df):
+    """
+    tokenize all the words in the dataframe
+    :param df:
+    :return list of tokens:
+    """
+    text = df.text.tolist()
+    tokens = []
+    for post in text:
+        tokens = tokens + word_tokenize(post)
+
+    return tokens
+
+
+def tokenize_post(post):
+    """
+    tokenize only one post
+    :param post:
+    :return list of tokens:
+    """
+    return word_tokenize(post)
+
+
+def find_df(dataframe, threshold):
     stop_words = get_stop_words()
     text = dataframe.text.tolist()
     term_df = {}
