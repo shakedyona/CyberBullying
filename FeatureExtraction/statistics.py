@@ -18,7 +18,7 @@ def create_tf_idf(dataframe, num_of_words):
     posts = dataframe['text'].tolist()
     dict = {}
     # create a vocabulary of words,
-    cv = CountVectorizer(max_df=0.85, stop_words=preprocessing.get_stop_words())
+    cv = CountVectorizer(max_df=0.85, stop_words=utils.get_stop_words())
     word_count_vector = cv.fit_transform(posts)
     tfidf_transformer = TfidfTransformer(smooth_idf=True, use_idf=True)
     tfidf_transformer.fit(word_count_vector)
@@ -73,12 +73,8 @@ def get_common_words(dataframe, number):
     :param number:
     :return:
     """
-    stop_words = preprocessing.get_stop_words()
-    text = dataframe.text.tolist()
-    tokens = []
-    for post in text:
-        tokens = tokens + word_tokenize(post)
-
+    stop_words = utils.get_stop_words()
+    tokens = preprocessing.tokenize_df(dataframe)
     word_frequency = {}
 
     for word in tokens:
@@ -92,31 +88,6 @@ def get_common_words(dataframe, number):
     most_common_dictionary = word_counter.most_common(number)
 
     return most_common_dictionary
-
-
-def find_df(dataframe, threshold):
-    stop_words = preprocessing.get_stop_words()
-    text = dataframe.text.tolist()
-    term_df = {}
-    number_posts = len(text)
-    print(number_posts)
-
-    for index_post in range(1, number_posts):
-        tokens = word_tokenize(text[index_post])
-        for token in tokens:
-            if token in term_df:
-                list_posts = term_df[token]
-                if index_post not in list_posts:
-                    term_df[token].append(index_post)  # todo: change from indexes to counter
-            else:
-                term_df[token] = []
-                term_df[token].append(index_post)
-
-    for token, posts in term_df.items():
-        df = len(posts)
-        df_normal = float(df / number_posts)
-        if df_normal > threshold:
-            stop_words.append(token)
 
 
 def get_post_length(dataframe):
