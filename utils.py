@@ -9,7 +9,11 @@ def get_no_abusive_df(df):
     return df.loc[df['cb_level'] == '1']
 
 
-def file_to_list(path, encoding='cp1255',header=True):
+def get_tagged_posts(df):
+    return df.loc[(df['cb_level'] == '1') | (df['cb_level'] == '3')]
+
+
+def file_to_list(path, encoding='cp1255', header=True):
     '''
     Insert file data into list
     :param path:
@@ -18,7 +22,7 @@ def file_to_list(path, encoding='cp1255',header=True):
     :return:
     '''
     try:
-        with open(path, mode='r',encoding=encoding) as infile:
+        with open(path, mode='r', encoding=encoding) as infile:
             myList = [line.strip('\n') for line in infile]
     except UnicodeDecodeError as e:
         with open(path,mode='r', encoding='utf-8') as infile:
@@ -42,3 +46,8 @@ def traverse(word):
     return word
 
 
+# def read_csv_to_df(path):
+    # column_names = []
+    # df = pd.read_csv(path)
+    # return df
+    # df.columns = column_names
