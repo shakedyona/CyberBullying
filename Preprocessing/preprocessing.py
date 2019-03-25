@@ -208,6 +208,7 @@ def num_of_abusive_per_column(df, column_name):
     number_of_abusive_df = df.groupby(column_name)['cb_level'].apply(lambda x: x[x == '3'].count())
     normalized_abusive_df = df.groupby(column_name)['cb_level'].apply(lambda x: (x[x == '3'].count() / x.count()) * 100)
 
+
     result = pd.DataFrame({'total_count': total_count_df})\
         .merge(pd.DataFrame({'total_from_corpus': total_from_corpus_df}), on=[column_name], right_index=True)
 
