@@ -23,19 +23,15 @@ def extract_tf_idf(df):
     svdT = TruncatedSVD(n_components=1)
     svdTFit = svdT.fit_transform(X)
     df_svd = pd.DataFrame(columns=['id', 'tfidf'])
-    # i = 0
     df_svd['id'] = df['id']
     df_svd['tfidf'] = np.array(svdTFit).flatten()
-    # for index, row in df.iterrows():
-    #     df_svd = df_svd.append({'id': row['id'], 'tfidf': svdTFit[i][0]}, ignore_index=True)
-    #     i = i+1
     return df_svd
 
 
 def extract_post_length(df):
     df_length = pd.DataFrame(columns=['id', 'post_length'])
-    for index, row in df.iterrows():
-        df_length = df_length.append({'id': row['id'], 'post_length': int(len(word_tokenize(row['text'])))}, ignore_index=True)
+    df_length['id'] = df['id']
+    df_length['post_length'] = df['text'].apply(lambda x: len(x))
     return df_length
 
 

@@ -22,7 +22,7 @@ def explain_xgboost(X,y):
     explainer = shap.TreeExplainer(model)
     shap_values = explainer.shap_values(X)
     # create a SHAP dependence plot to show the effect of a single feature across the whole dataset
-    #shap.dependence_plot("RM", shap_values, X)
+    shap.dependence_plot("post_length", shap_values, X)
     # summarize the effects of all the features
     shap.summary_plot(shap_values, X)
     shap.summary_plot(shap_values, X, plot_type="bar")
