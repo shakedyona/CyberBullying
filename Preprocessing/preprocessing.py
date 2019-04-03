@@ -11,6 +11,7 @@ def preprocess(df):
     for index, row in df.iterrows():
         row['text'] = re.sub(r'[^א-ת]', ' ', ' '.join(word_tokenize(row['text']))).strip().rstrip()
 
+    df.drop_duplicates(subset='id', inplace=True)
     return df
 
 
