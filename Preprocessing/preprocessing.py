@@ -14,3 +14,25 @@ def preprocess(df):
     return df
 
 
+
+def tokenize_df(df):
+    """
+    tokenize all the words in the dataframe
+    :param df:
+    :return list of tokens:
+    """
+    text = df.text.tolist()
+    tokens = []
+    for post in text:
+        tokens = tokens + word_tokenize(post)
+
+    return tokens
+
+
+def tokenize_post(post):
+    """
+    tokenize only one post
+    :param post:
+    :return list of tokens:
+    """
+    return word_tokenize(post)
