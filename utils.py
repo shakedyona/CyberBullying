@@ -1,6 +1,7 @@
 import pandas as pd
 from nltk.tokenize import word_tokenize
 
+
 def get_abusive_df(df):
     return df.loc[df['cb_level'] == '3']
 
@@ -85,8 +86,13 @@ def create_stop_words_list(dataframe, threshold):
 
     return stop_words
 
-# def read_csv_to_df(path):
-    # column_names = []
-    # df = pd.read_csv(path)
-    # return df
-    # df.columns = column_names
+
+def read_to_df():
+    """
+    reads the csv data file to a data frame and gets only the tagged post
+    :return df:
+    """
+    path = 'data.csv'
+    cols = ['id', 'time', 'source', 'sub_source', 'writer', 'link', 'text', 'cb_level', 'comment_shared_post']
+    df = pd.read_csv(path, names=cols)
+    return get_tagged_posts(df)

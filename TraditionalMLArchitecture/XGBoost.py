@@ -1,10 +1,11 @@
-import xgboost as xgb
-from sklearn.metrics import mean_squared_error
-import pandas as pd
-import numpy as np
-from sklearn.model_selection import train_test_split
-
 from TraditionalMLArchitecture.MLModel import MLModel
+from xgboost import XGBClassifier
+
+
+def train(X_train, y_train):
+    xgb_model = XGBClassifier()
+    xgb_model.fit(X_train, y_train)
+    return xgb_model
 
 
 class XGBoost (MLModel):

@@ -15,7 +15,6 @@ def preprocess(df):
     return df
 
 
-
 def tokenize_df(df):
     """
     tokenize all the words in the dataframe

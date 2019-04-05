@@ -11,12 +11,8 @@ def explain_xgboost(X,y):
     # check error
     X = X.drop(columns=['id'])
     shap.initjs()
-    print(X.shape)
-    print(X)
-    print(y)
-    print(X.dtypes)
     model = XGBClassifier()
-    model.fit(X,y)
+    model.fit(X, y)
     #model = xgboost.train({"learning_rate": 0.01}, xgboost.DMatrix(X, label=y), 100)
     # explain the model's predictions using SHAP values
     # (same syntax works for LightGBM, CatBoost, and scikit-learn models)
