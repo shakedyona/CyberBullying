@@ -15,7 +15,7 @@ y = (tagged_df['cb_level'] == '3').astype(int)
 X = X.drop(columns=['id'])
 # split data to train and test
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
-model = xgb.train(X_train, X_test)
+model = xgb.train(X_train, y_train)
 y_pred = model.predict(X_test)
 performances = per.get_performances(y_test, y_pred)
 print(performances)
