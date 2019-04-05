@@ -1,4 +1,3 @@
-import wordcloud
 import matplotlib.pyplot as plt
 import utils
 import os
@@ -67,4 +66,5 @@ def plot_roc_curve(roc_auc, fpr, tpr):
     plt.title('Receiver operating characteristic example')
     plt.legend(loc="lower right")
     plt.show()
+
 
