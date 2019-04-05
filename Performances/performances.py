@@ -17,3 +17,9 @@ def precision(true, pred):
 
 def recall(true,pred):
     return recall_score(true, pred, average='macro')
+
+
+def get_roc_auc():
+    fpr, tpr, _ = roc_curve(y, y_pred)
+    roc_auc = auc(fpr, tpr)
+    return roc_auc, fpr, tpr

@@ -1,16 +1,21 @@
 from collections import Counter
 from functools import partial
-# import preprocessing as pre
+import Preprocessing.preprocessing as pre
 from nltk import ngrams, word_tokenize
+
 
 def clean(df):
     stop_words = pre.get_stop_words()
 
+
 def bigrams_from_text(df):
+    pass
+
 
 for i in range(1, 4):
-    _ngrams = partial(ngrams, n=i)
-    df['{}-grams'.format(i)] = df['text'].apply(lambda x: Counter(_ngrams(word_tokenize(x))))
+    pass
+    #_ngrams = partial(ngrams, n=i)
+    # df['{}-grams'.format(i)] = df['text'].apply(lambda x: Counter(_ngrams(word_tokenize(x))))
 
 
 
