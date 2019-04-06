@@ -2,6 +2,8 @@ import matplotlib.pyplot as plt
 import utils
 import os
 import pandas as pd
+import xgboost as xgb
+import wordcloud
 
 
 def plot_tf_idf_post(dictionary_tf_idf, title, unique=False):
@@ -67,4 +69,9 @@ def plot_roc_curve(roc_auc, fpr, tpr):
     plt.legend(loc="lower right")
     plt.show()
 
+
+def plot_feature_importance_xgb(booster):
+    xgb.plot_importance(booster, importance_type='gain')
+    plt.rcParams['figure.figsize'] = [5, 5]
+    plt.show()
 
