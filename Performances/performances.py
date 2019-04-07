@@ -3,8 +3,13 @@ from sklearn.metrics import precision_score
 from sklearn.metrics import recall_score
 import random
 
+
 def get_performances(true, pred):
-    return f_measure(true, pred),precision(true, pred),recall(true, pred)
+    return {
+        'f-score': f_measure(true, pred),
+        'precision': precision(true, pred),
+        'recall': recall(true, pred)
+    }
 
 
 def f_measure(true, pred):

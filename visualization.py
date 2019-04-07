@@ -4,6 +4,7 @@ import os
 import pandas as pd
 import xgboost as xgb
 import wordcloud
+import numpy as np
 
 
 def plot_tf_idf_post(dictionary_tf_idf, title, unique=False):
@@ -73,5 +74,20 @@ def plot_roc_curve(roc_auc, fpr, tpr):
 def plot_feature_importance_xgb(booster):
     xgb.plot_importance(booster, importance_type='gain')
     plt.rcParams['figure.figsize'] = [5, 5]
+    plt.show()
+
+
+def plot_models_compare(per1, per2):
+    fig, ax = plt.subplots()
+    index = np.arange(3)
+    ax.bar(index, [per1[key] for key in sorted(per1.keys())], color=(0.5, 0.4, 0.8, 0.4), width=0.3, label='XGBoost')
+    ax.bar(index+0.35, [per2[key] for key in sorted(per2.keys())], color=(0.8, 0.5, 0.4, 0.6), width=0.3, label='Baseline')
+    ax.set_xlabel('Performances')
+    ax.set_ylabel('')
+    ax.set_title('XGBoost VS Baseline')
+    ax.set_xticks(index+0.3/2)
+    ax.set_xticklabels(['F-Measure', 'Precision', 'Recall'])
+    ax.legend()
+    fig.tight_layout()
     plt.show()
 

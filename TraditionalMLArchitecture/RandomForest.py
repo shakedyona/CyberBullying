@@ -2,7 +2,7 @@ from TraditionalMLArchitecture.MLModel import MLModel
 import xgboost as xgb
 
 
-class XGBoost(MLModel):
+class RandomForest(MLModel):
     def __init__(self, x_train, y_train, x_test, y_test):
         super().__init__()
         self.x_train = x_train
