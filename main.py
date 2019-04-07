@@ -2,6 +2,7 @@ import utils
 import Preprocessing.preprocessing as pre
 import FeatureExtraction.featureExtraction as fe
 import TraditionalMLArchitecture.XGBoost as xgb
+import TraditionalMLArchitecture.RandomForest as rf
 from sklearn.model_selection import train_test_split
 import Performances.performances as per
 import visualization as vis
@@ -30,14 +31,18 @@ y_pred = xgbObj.train(num_boost_round=num_boost_round)
 y_pred_bin = np.where(y_pred > 0.5, 1, 0)
 performances_xgb = per.get_performances(y_test, y_pred_bin)
 
-# 3.
-
-
+# 3.Random forest
+rf_obj = rf.RandomForest(X_train, y_train, X_test, y_test)
+y_pred_rf = rf_obj.train()
+y_pred_bin1 = np.where(y_pred_rf > 0.5, 1, 0)
+performances_rf = per.get_performances(y_test, y_pred_bin1)
+print(performances_rf)
 # visualization
-roc_auc_xgb, fpr_xgb, tpr_xgb = per.get_roc_auc(y_test, y_pred)
-roc_auc_bl, fpr_bl, tpr_bl = per.get_roc_auc(y, y_pred_bl)
+# roc_auc_xgb, fpr_xgb, tpr_xgb = per.get_roc_auc(y_test, y_pred)
+# roc_auc_bl, fpr_bl, tpr_bl = per.get_roc_auc(y, y_pred_bl)
+roc_auc_rf, fpr_rf, tpr_rf = per.get_roc_auc(y_test, y_pred_rf)
 
 # vis.plot_roc_curve(roc_auc_bl, fpr_bl, tpr_bl)
 # vis.plot_roc_curve(roc_auc_xgb, fpr_xgb, tpr_xgb)
-
-vis.plot_models_compare(performances_xgb, performances_bl)
+vis.plot_roc_curve(roc_auc_rf, fpr_rf, tpr_rf)
+vis.plot_models_compare(performances_xgb, performances_rf)

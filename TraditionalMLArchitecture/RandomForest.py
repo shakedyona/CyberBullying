@@ -1,5 +1,5 @@
 from TraditionalMLArchitecture.MLModel import MLModel
-import xgboost as xgb
+from sklearn.ensemble import RandomForestClassifier
 
 
 class RandomForest(MLModel):
@@ -11,29 +11,22 @@ class RandomForest(MLModel):
         self.y_test = y_test
         self.bst = None
 
-    def train(self, num_boost_round, params=None):
+    def train(self, params=None):
         if params is None:
-            params = {'max_depth': 10, 'learning_rate': 0.01,
-                      'objective': 'binary:logistic', 'scale_pos_weight': 1,
-                      'n_estimators': 200, 'subsample': 0.3}
-        d_train = xgb.DMatrix(self.x_train, label=self.y_train)
-        d_test = xgb.DMatrix(self.x_test)
-        self.bst = xgb.train(params, d_train, num_boost_round=num_boost_round)
-        y_pred = self.bst.predict(d_test)
-        # self.classifier = xgb.XGBClassifier(objective='binary:logistic', max_depth=6, learning_rate=0.001,
-        # n_estimators=550, subsample=0.7, scale_pos_weight=1)
-        # self.bst = self.classifier.fit(train_X, train_y)
-        # y_pred = self.classifier.predict_proba(test_X)[:, 1]
-        return y_pred
+            params = {'max_depth': 10, 'min_samples_split': 10,
+                      'n_estimators': 200}
+        rf = RandomForestClassifier(n_estimators=200, max_depth=10, min_samples_split=10)
+        rf.fit(self.x_train, self.y_train)
+        y_pred = rf.predict_proba(self.x_test)
+        return y_pred[:, 1]
 
     def cross_validation(self, params=None):
-        if params is None:
-            params = {'max_depth': 10, 'learning_rate': 0.01,
-                      'objective': 'binary:logistic', 'scale_pos_weight': 1,
-                      'n_estimators': 200, 'subsample': 0.3}
-        d_train = xgb.DMatrix(self.x_train, label=self.y_train)
-        xgb_cv = xgb.cv(params, d_train, nfold=8, num_boost_round=300, metrics=['auc'], early_stopping_rounds=50)
-        s = xgb_cv.shape[0]
-        # print('AUC:', xgb_cv.values[s-1])
-        return xgb_cv.shape[0]  # the best number of rounds
+        # if params is None:
+        #     params = {'max_depth': 10, 'min_samples_split': 10,
+        #               'n_estimators': 200}
+        # d_train = xgb.DMatrix(self.x_train, label=self.y_train)
+        # xgb_cv = xgb.cv(params, d_train, nfold=8, num_boost_round=300, metrics=['auc'], early_stopping_rounds=50)
+        # s = xgb_cv.shape[0]
+        # return xgb_cv.shape[0]  # the best number of rounds
+        return True
 
