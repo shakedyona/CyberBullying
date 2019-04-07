@@ -11,10 +11,10 @@ class NaiveBayes(MLModel):
         self.y_test = y_test
         self.model = GaussianNB()
 
-    def train(self, params=None):
+    def train(self):
         self.model.fit(self.x_train, self.y_train)
-        y_pred = self.model.predict(self.x_test)  # predict_proba
-        return y_pred
+        y_pred = self.model.predict_proba(self.x_test)  # predict_proba
+        return y_pred[:,1]
 
     def cross_validation(self, params=None):
         pass
