@@ -9,9 +9,11 @@ import Performances.performances as per
 import visualization as vis
 import numpy as np
 import Baseline as bl
+from Explainability.explanation import explain_model
 
 # get tagged df
-tagged_df = utils.read_to_df()
+# tagged_df = utils.read_to_df()  # Vigo data
+tagged_df = utils.create_csv_from_keepers_files()  # Keepers data
 # pre process
 tagged_df = pre.preprocess(tagged_df)
 # extract features
@@ -45,14 +47,18 @@ y_pred_bin2 = np.where(y_pred_nb > 0.5, 1, 0)
 performances_nb = per.get_performances(y_test, y_pred_bin2)
 
 # visualization
-# roc_auc_xgb, fpr_xgb, tpr_xgb = per.get_roc_auc(y_test, y_pred)
-# roc_auc_bl, fpr_bl, tpr_bl = per.get_roc_auc(y, y_pred_bl)
+roc_auc_xgb, fpr_xgb, tpr_xgb = per.get_roc_auc(y_test, y_pred)
+roc_auc_bl, fpr_bl, tpr_bl = per.get_roc_auc(y, y_pred_bl)
 roc_auc_rf, fpr_rf, tpr_rf = per.get_roc_auc(y_test, y_pred_rf)
 roc_auc_nb, fpr_nb, tpr_nb = per.get_roc_auc(y_test, y_pred_nb)
 
-# vis.plot_roc_curve(roc_auc_bl, fpr_bl, tpr_bl)
-# vis.plot_roc_curve(roc_auc_xgb, fpr_xgb, tpr_xgb)
-# vis.plot_roc_curve(roc_auc_rf, fpr_rf, tpr_rf)
+vis.plot_roc_curve(roc_auc_bl, fpr_bl, tpr_bl)
+vis.plot_roc_curve(roc_auc_xgb, fpr_xgb, tpr_xgb)
+vis.plot_roc_curve(roc_auc_rf, fpr_rf, tpr_rf)
 vis.plot_roc_curve(roc_auc_nb, fpr_nb, tpr_nb)
 
-vis.plot_models_compare(performances_xgb, performances_nb)
+vis.plot_models_compare(performances_xgb, performances_bl)
+
+
+# SHAP for XGBoost:
+explain_model(xgbObj.get_booster(), X_test)
