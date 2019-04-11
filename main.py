@@ -12,12 +12,12 @@ import Baseline as bl
 from Explainability.explanation import explain_model
 
 # get tagged df
-# tagged_df = utils.read_to_df()  # Vigo data
-tagged_df = utils.create_csv_from_keepers_files()  # Keepers data
+tagged_df = utils.read_to_df()  # Vigo data
+# tagged_df = utils.create_csv_from_keepers_files()  # Keepers data
 # pre process
 tagged_df = pre.preprocess(tagged_df)
 # extract features
-X = fe.extract_features(tagged_df, ['post_length', 'tfidf', 'topics', 'screamer'])
+X = fe.extract_features(tagged_df, ['post_length', 'tfidf', 'topics'])
 y = (tagged_df['cb_level'] == '3').astype(int)
 X = X.drop(columns=['id'])
 # split data to train and test

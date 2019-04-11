@@ -28,17 +28,16 @@ def plot_length_posts(dictionary_length, title, unique=False):
 
 
 def create_word_cloud(no_topics, lda, feature_names,name_image):
-    global stop_words
     font_path = os.path.join(os.path.join(os.environ['WINDIR'], 'Fonts'), 'ahronbd.ttf')
     for i in range(0, no_topics):
         d = dict(zip(utils.traverse(feature_names), lda.components_[i]))
-        wc = wordcloud.WordCloud(background_color='white', font_path=font_path, max_words=100,stopwords=stop_words)
+        wc = wordcloud.WordCloud(background_color='white', font_path=font_path, max_words=100,stopwords=utils.get_stop_words())
         image = wc.generate_from_frequencies(d)
         image.to_file(name_image+str(i)+'.png')
         plt.imshow(wc, interpolation='bilinear')
         plt.axis("off")
         plt.figure()
-        # plt.show()
+        plt.show()
 
 
 def print_tf_idf_dict(tf_idf_dict):

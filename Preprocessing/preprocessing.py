@@ -9,7 +9,7 @@ def preprocess(df):
     :return clean_df: dataframe
     """
     for index, row in df.iterrows():
-        row['text'] = re.sub(r'[^א-ת]', ' ', ' '.join(word_tokenize(row['text']))).strip().rstrip()
+        row['text'] = re.sub(r'^[א-ת]', ' ', ' '.join(word_tokenize(row['text']))).strip().rstrip()
 
     df.drop_duplicates(subset='id', inplace=True)
     df.dropna(inplace=True)

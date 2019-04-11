@@ -8,6 +8,7 @@ def explain_model(model, X):
     # (same syntax works for LightGBM, CatBoost, and scikit-learn models)
     explainer = shap.TreeExplainer(model)
     shap_values = explainer.shap_values(X)
+    shap.force_plot(explainer.expected_value, shap_values[120, :], X.iloc[120, :],matplotlib=True)
     # create a SHAP dependence plot to show the effect of a single feature across the whole dataset
     shap.dependence_plot("post_length", shap_values, X)
     # summarize the effects of all the features

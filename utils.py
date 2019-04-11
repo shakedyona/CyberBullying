@@ -92,7 +92,7 @@ def read_to_df():
     reads the csv data file to a data frame and gets only the tagged post
     :return df:
     """
-    path = 'data.csv'
+    path = 'olddata.csv'
     cols = ['id', 'time', 'source', 'sub_source', 'writer', 'link', 'text', 'cb_level', 'comment_shared_post']
     df = pd.read_csv(path, names=cols)
     return get_tagged_posts(df)
