@@ -52,7 +52,7 @@ roc_auc_bl, fpr_bl, tpr_bl = per.get_roc_auc(y, y_pred_bl)
 roc_auc_rf, fpr_rf, tpr_rf = per.get_roc_auc(y_test, y_pred_rf)
 roc_auc_nb, fpr_nb, tpr_nb = per.get_roc_auc(y_test, y_pred_nb)
 
-vis.plot_roc_curve(roc_auc_bl, fpr_bl, tpr_bl)
+#vis.plot_roc_curve(roc_auc_bl, fpr_bl, tpr_bl)
 vis.plot_roc_curve(roc_auc_xgb, fpr_xgb, tpr_xgb)
 vis.plot_roc_curve(roc_auc_rf, fpr_rf, tpr_rf)
 vis.plot_roc_curve(roc_auc_nb, fpr_nb, tpr_nb)

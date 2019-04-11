@@ -4,7 +4,7 @@ import re
 
 def preprocess(df):
     """
-    get a dataframe - clean and preprocess its data and return the result dataframe
+    get a dataframe - keepersData and preprocess its data and return the result dataframe
     :param df: dataframe
     :return clean_df: dataframe
     """

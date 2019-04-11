@@ -96,3 +96,25 @@ def read_to_df():
     cols = ['id', 'time', 'source', 'sub_source', 'writer', 'link', 'text', 'cb_level', 'comment_shared_post']
     df = pd.read_csv(path, names=cols)
     return get_tagged_posts(df)
+
+
+def create_csv_from_keepers_files(folder_path = 'keepersData'):
+    path_neg = folder_path + '/sentences.neg'
+    path_pos = folder_path + '/sentences.pos'
+    cols = ['id', 'text', 'cb_level']
+    df_neg = pd.DataFrame(columns=cols)
+    df_pos = pd.DataFrame(columns=cols)
+    with open(path_neg, 'r') as f:
+        df_neg['text'] = f.readlines()
+    with open(path_pos, 'r') as f:
+        df_pos['text'] = f.readlines()
+    df_neg['cb_level'] = '3'
+    df_pos['cb_level'] = '1'
+
+    df_neg = df_neg.reset_index(drop=True)
+    df_pos = df_pos.reset_index(drop=True)
+    df = pd.concat([df_neg, df_pos],axis=0,ignore_index=True)
+    df['id'] = list(range(df.shape[0]))
+    return df
+
+

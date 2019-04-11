@@ -37,3 +37,5 @@ class XGBoost(MLModel):
         # print('AUC:', xgb_cv.values[s-1])
         return xgb_cv.shape[0]  # the best number of rounds
 
+    def get_booster(self):
+        return self.bst
