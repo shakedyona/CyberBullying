@@ -11,7 +11,8 @@ def get_functions_dictionary():
     return {
         'tfidf': extract_tf_idf,
         'post_length': extract_post_length,
-        'topics': extract_topics
+        'topics': extract_topics,
+        'screamer': contains_screamer
     }
 
 
@@ -39,6 +40,17 @@ def extract_topics(df):
     features = pd.DataFrame(dt_matrix, columns=['T1', 'T2', 'T3'])
     features['id'] = df['id'].tolist()
     return features
+
+
+def contains_screamer(df):
+    df_contains = pd.DataFrame(columns=['id', 'screamer'])
+    df_contains['id'] = df['id'].tolist()
+    df_contains['screamer'] = df['text'].apply(lambda x: 1 if x.contains('!!') else 0)
+    # if df[df['text'].str.contains('!!')]:
+    #     df_contains['screamer'] = 1
+    # else:
+    #     df_contains['screamer'] = 0
+    return df_contains
 
 
 def extract_features(df, features):

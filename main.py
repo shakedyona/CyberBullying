@@ -17,7 +17,7 @@ tagged_df = utils.create_csv_from_keepers_files()  # Keepers data
 # pre process
 tagged_df = pre.preprocess(tagged_df)
 # extract features
-X = fe.extract_features(tagged_df, ['post_length', 'tfidf', 'topics'])
+X = fe.extract_features(tagged_df, ['post_length', 'tfidf', 'topics', 'screamer'])
 y = (tagged_df['cb_level'] == '3').astype(int)
 X = X.drop(columns=['id'])
 # split data to train and test
@@ -52,7 +52,7 @@ roc_auc_bl, fpr_bl, tpr_bl = per.get_roc_auc(y, y_pred_bl)
 roc_auc_rf, fpr_rf, tpr_rf = per.get_roc_auc(y_test, y_pred_rf)
 roc_auc_nb, fpr_nb, tpr_nb = per.get_roc_auc(y_test, y_pred_nb)
 
-#vis.plot_roc_curve(roc_auc_bl, fpr_bl, tpr_bl)
+# vis.plot_roc_curve(roc_auc_bl, fpr_bl, tpr_bl)
 vis.plot_roc_curve(roc_auc_xgb, fpr_xgb, tpr_xgb)
 vis.plot_roc_curve(roc_auc_rf, fpr_rf, tpr_rf)
 vis.plot_roc_curve(roc_auc_nb, fpr_nb, tpr_nb)
