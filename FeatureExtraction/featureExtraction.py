@@ -13,7 +13,8 @@ def get_functions_dictionary():
         'tfidf': extract_tf_idf,
         'post_length': extract_post_length,
         'topics': extract_topics,
-        'screamer': contains_screamer
+        'screamer': contains_screamer,
+        'words': extract_meaningful_words_distance
     }
 
 
@@ -51,6 +52,16 @@ def contains_screamer(df):
     return df_contains
 
 
+def extract_meaningful_words_distance(df):
+    tf_idf_difference = get_meaningful_words_tf_idf_difference(df).sort_values(by=0, axis=1, ascending=False)
+    top_20 = tf_idf_difference.iloc[:, 0:20]
+    df_abusive_words = pd.DataFrame(columns=['id'].__add__(list(top_20.columns.values)))
+    df_abusive_words['id'] = df['id'].tolist()
+    for word in list(top_20.columns.values):
+        df_abusive_words[word] = df['text'].apply(lambda x: 1 if word in x else 0)
+    return df_abusive_words
+
+
 def extract_features(df, features):
     functions_dict = get_functions_dictionary()
     features_df = pd.DataFrame(columns=['id'])
@@ -60,3 +71,15 @@ def extract_features(df, features):
     for feature in features:
         features_df = pd.merge(features_df, functions_dict[feature](df), on='id')
     return features_df
+
+
+def get_meaningful_words_tf_idf_difference(df):
+    df_neg = utils.get_abusive_df(df)
+    df_pos = utils.get_no_abusive_df(df)
+    posts = [' '.join(df_neg['text'].tolist()), ' '.join(df_pos['text'].tolist())]
+
+    tfidf = TfidfVectorizer(stop_words=utils.get_stop_words(), ngram_range=(1, 2))
+    x = tfidf.fit_transform(posts)
+    x = x[0,:] - x[1,:]
+    df_tf_idf = pd.DataFrame(x.toarray(), columns=tfidf.get_feature_names())
+    return df_tf_idf
