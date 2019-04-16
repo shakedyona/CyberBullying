@@ -8,11 +8,10 @@ def preprocess(df):
     :param df: dataframe
     :return clean_df: dataframe
     """
-    for index, row in df.iterrows():
-        row['text'] = re.sub(r'^[א-ת]', ' ', ' '.join(word_tokenize(row['text']))).strip().rstrip()
-
     df.drop_duplicates(subset='id', inplace=True)
     df.dropna(inplace=True)
+    for index, row in df.iterrows():
+        row['text'] = re.sub(r'[^א-ת!]+', ' ', row['text'])
     df.reset_index(drop=True, inplace=True)
     return df
 

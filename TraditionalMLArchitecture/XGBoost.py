@@ -13,7 +13,7 @@ class XGBoost(MLModel):
 
     def train(self, num_boost_round, params=None):
         if params is None:
-            params = {'max_depth': 10, 'learning_rate': 0.01,
+            params = {'max_depth': 15, 'learning_rate': 0.01,
                       'objective': 'binary:logistic', 'scale_pos_weight': 1,
                       'n_estimators': 200, 'subsample': 0.3}
         d_train = xgb.DMatrix(self.x_train, label=self.y_train)
@@ -28,11 +28,11 @@ class XGBoost(MLModel):
 
     def cross_validation(self, params=None):
         if params is None:
-            params = {'max_depth': 10, 'learning_rate': 0.01,
+            params = {'max_depth': 15, 'learning_rate': 0.01,
                       'objective': 'binary:logistic', 'scale_pos_weight': 1,
                       'n_estimators': 200, 'subsample': 0.3}
         d_train = xgb.DMatrix(self.x_train, label=self.y_train)
-        xgb_cv = xgb.cv(params, d_train, nfold=8, num_boost_round=300, metrics=['auc'], early_stopping_rounds=50)
+        xgb_cv = xgb.cv(params, d_train, nfold=10, num_boost_round=1000, metrics=['auc'], early_stopping_rounds=100)
         s = xgb_cv.shape[0]
         # print('AUC:', xgb_cv.values[s-1])
         return xgb_cv.shape[0]  # the best number of rounds

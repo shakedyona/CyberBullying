@@ -46,6 +46,7 @@ def traverse(word):
     elif type(word) == type(type(pd.DataFrame())): return word.applymap(lambda x: traverse(x))
     return word
 
+
 def get_stop_words():
     """
     gets list of stop words from a file
@@ -92,8 +93,8 @@ def read_to_df():
     reads the csv data file to a data frame and gets only the tagged post
     :return df:
     """
-    path = 'olddata.csv'
-    cols = ['id', 'time', 'source', 'sub_source', 'writer', 'link', 'text', 'cb_level', 'comment_shared_post']
+    path = 'dataNew.csv'
+    cols = ['id', 'time', 'source', 'sub_source', 'writer', 'link', 'text', 'cb_level']
     df = pd.read_csv(path, names=cols)
     return get_tagged_posts(df)
 

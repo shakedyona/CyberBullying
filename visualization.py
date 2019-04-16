@@ -31,12 +31,12 @@ def create_word_cloud(no_topics, lda, feature_names,name_image):
     font_path = os.path.join(os.path.join(os.environ['WINDIR'], 'Fonts'), 'ahronbd.ttf')
     for i in range(0, no_topics):
         d = dict(zip(utils.traverse(feature_names), lda.components_[i]))
-        wc = wordcloud.WordCloud(background_color='white', font_path=font_path, max_words=100,stopwords=utils.get_stop_words())
+        wc = wordcloud.WordCloud(background_color='white', font_path=font_path, max_words=50, stopwords=utils.get_stop_words())
         image = wc.generate_from_frequencies(d)
         image.to_file(name_image+str(i)+'.png')
+        plt.figure()
         plt.imshow(wc, interpolation='bilinear')
         plt.axis("off")
-        plt.figure()
         plt.show()
 
 
@@ -56,7 +56,7 @@ def plot_part_of_day(dictionary_time, title, unique=False):
     plt.show()
 
 
-def plot_roc_curve(roc_auc, fpr, tpr):
+def plot_roc_curve(roc_auc, fpr, tpr, name):
     plt.figure()
     lw = 1
     plt.plot(fpr, tpr, color='darkorange', lw=lw, label='ROC curve (area = %0.2f)' % roc_auc)
@@ -65,7 +65,7 @@ def plot_roc_curve(roc_auc, fpr, tpr):
     plt.ylim([0.0, 1.05])
     plt.xlabel('False Positive Rate')
     plt.ylabel('True Positive Rate')
-    plt.title('Receiver operating characteristic example')
+    plt.title('Receiver operating characteristic -'+str(name))
     plt.legend(loc="lower right")
     plt.show()
 
@@ -76,14 +76,16 @@ def plot_feature_importance_xgb(booster):
     plt.show()
 
 
-def plot_models_compare(per1, per2):
+def plot_models_compare(per1, per2, per3, per4):
     fig, ax = plt.subplots()
     index = np.arange(3)
-    ax.bar(index, [per1[key] for key in sorted(per1.keys())], color=(0.5, 0.4, 0.8, 0.4), width=0.3, label='XGBoost')
-    ax.bar(index+0.35, [per2[key] for key in sorted(per2.keys())], color=(0.8, 0.5, 0.4, 0.6), width=0.3, label='Baseline')
+    ax.bar(index, [per1[key] for key in sorted(per1.keys())], color=(0.5, 0.4, 0.8, 0.4), width=0.2, label='Baseline')
+    ax.bar(index+0.35, [per2[key] for key in sorted(per2.keys())], color=(0.8, 0.5, 0.4, 0.6), width=0.2, label='XGBoost')
+    ax.bar(index+0.7, [per3[key] for key in sorted(per3.keys())], color=(0.2, 0.8, 0.4, 0.6), width=0.2, label='Random forest')
+    ax.bar(index+1.05, [per4[key] for key in sorted(per4.keys())], color=(0.5, 0.8, 0.3, 0.5), width=0.2, label='Naive bayes')
     ax.set_xlabel('Performances')
     ax.set_ylabel('')
-    ax.set_title('XGBoost VS Baseline')
+    ax.set_title('Model compare')
     ax.set_xticks(index+0.3/2)
     ax.set_xticklabels(['F-Measure', 'Precision', 'Recall'])
     ax.legend()
