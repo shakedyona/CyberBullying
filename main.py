@@ -27,7 +27,15 @@ tagged_df = utils.read_to_df()  # Vigo data
 # pre process
 tagged_df = pre.preprocess(tagged_df)
 # extract features
-X = fe.extract_features(tagged_df, ['post_length', 'tfidf', 'topics', 'screamer', 'words'],folder_name)
+X = fe.extract_features(tagged_df,
+                        ['post_length',
+                         'tfidf',
+                         'topics',
+                         'screamer',
+                         'words',
+                         'offensive_distance',
+                         'not_offensive_distance'], folder_name)
+
 y = (tagged_df['cb_level'] == '3').astype(int)
 X = X.drop(columns=['id'])
 # split data to train and test

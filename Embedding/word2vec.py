@@ -1,5 +1,4 @@
 import multiprocessing
-
 from gensim.models import Word2Vec
 from gensim.models.word2vec import LineSentence
 import time
@@ -26,5 +25,6 @@ def get_model(model="wiki.he.word2vec.model"):
     return model
 
 
-m = get_model('our.corpus.word2vec.model')
-print(m.wv.most_similar('שלום'))
+
+
+

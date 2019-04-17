@@ -6,8 +6,11 @@ import pandas as pd
 import numpy as np
 from FeatureExtraction.LDA import create_LDA_model
 import utils
+import Embedding.WordEmbedding as we
+from Embedding.word2vec import get_model
 
 folder_name = None
+
 
 def get_functions_dictionary():
     return {
@@ -15,7 +18,9 @@ def get_functions_dictionary():
         'post_length': extract_post_length,
         'topics': extract_topics,
         'screamer': contains_screamer,
-        'words': extract_meaningful_words_distance
+        'words': extract_meaningful_words_distance,
+        'offensive_distance': extract_distance_from_offensive,
+        'not_offensive_distance': extract_distance_from_not_offensive
     }
 
 
@@ -63,6 +68,18 @@ def extract_meaningful_words_distance(df):
     return df_abusive_words
 
 
+def extract_distance_from_offensive(df):
+    tf_idf_difference = get_meaningful_words_tf_idf_difference(df).sort_values(by=0, axis=1, ascending=False)
+    offensive = tf_idf_difference.iloc[:, 0:20]
+    return get_distance_df(df, 'offensive_distance', offensive)
+
+
+def extract_distance_from_not_offensive(df):
+    tf_idf_difference = get_meaningful_words_tf_idf_difference(df).sort_values(by=0, axis=1, ascending=False)
+    not_offensive = tf_idf_difference.iloc[:, -20:-1]
+    return get_distance_df(df, 'not_offensive_distance', not_offensive)
+
+
 def extract_features(df, features,myfolder):
     global folder_name
     folder_name = myfolder
@@ -86,3 +103,19 @@ def get_meaningful_words_tf_idf_difference(df):
     x = x[0,:] - x[1,:]
     df_tf_idf = pd.DataFrame(x.toarray(), columns=tfidf.get_feature_names())
     return df_tf_idf
+
+
+def get_distance_df(df, column_name, words_difference, distance_type='euclidean'):
+    words = list(words_difference.columns.values)
+    df_offensive_distance = pd.DataFrame(columns=['id', column_name])
+    df_offensive_distance['id'] = df['id'].tolist()
+
+    m_wiki = get_model("Embedding/wiki.he.word2vec.model")
+    m_our = get_model("Embedding/our.corpus.word2vec.model")
+
+    df_offensive_distance[column_name] = df['text'].apply(
+        lambda x:
+        utils.calculate_distance(we.get_post_vector(m_our, m_wiki, x),
+                                 we.get_post_vector(m_our, m_wiki, ' '.join(words)), distance_type)
+    )
+    return df_offensive_distance

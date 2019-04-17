@@ -1,5 +1,6 @@
 import pandas as pd
 from nltk.tokenize import word_tokenize
+from scipy.spatial import distance
 
 
 def get_abusive_df(df):
@@ -88,6 +89,14 @@ def create_stop_words_list(dataframe, threshold):
     return stop_words
 
 
+def calculate_distance(a, b, distance_type='euclidean'):
+    if distance_type == 'euclidean':
+        return distance.euclidean(a, b)
+    if distance_type == 'cosine':
+        return distance.cosine(a, b)
+    return None
+
+
 def read_to_df():
     """
     reads the csv data file to a data frame and gets only the tagged post
@@ -95,7 +104,7 @@ def read_to_df():
     """
     path = 'dataNew.csv'
     cols = ['id', 'time', 'source', 'sub_source', 'writer', 'link', 'text', 'cb_level']
-    df = pd.read_csv(path, names=cols)
+    df = pd.read_csv(path, names=cols,)
     return get_tagged_posts(df)
 
 
