@@ -11,7 +11,7 @@ class RandomForest(MLModel):
         self.y_test = y_test
         self.bst = None
 
-    def train(self, params=None):
+    def train_predict(self, params=None):
         if params is None:
             params = {'max_depth': 10, 'min_samples_split': 10,
                       'n_estimators': 200}

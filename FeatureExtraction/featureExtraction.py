@@ -7,6 +7,7 @@ import numpy as np
 from FeatureExtraction.LDA import create_LDA_model
 import utils
 
+folder_name = None
 
 def get_functions_dictionary():
     return {
@@ -38,8 +39,8 @@ def extract_post_length(df):
 
 
 def extract_topics(df):
-    dt_matrix = create_LDA_model(df, 4, '')
-    features = pd.DataFrame(dt_matrix, columns=['T1', 'T2', 'T3', 'T4'])
+    dt_matrix = create_LDA_model(df, 3, '',folder_name)
+    features = pd.DataFrame(dt_matrix, columns=['T1', 'T2', 'T3'])
     features['id'] = df['id'].tolist()
     return features
 
@@ -62,7 +63,9 @@ def extract_meaningful_words_distance(df):
     return df_abusive_words
 
 
-def extract_features(df, features):
+def extract_features(df, features,myfolder):
+    global folder_name
+    folder_name = myfolder
     functions_dict = get_functions_dictionary()
     features_df = pd.DataFrame(columns=['id'])
     # features_df = pd.DataFrame(columns=['id','text'])

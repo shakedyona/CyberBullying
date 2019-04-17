@@ -3,9 +3,6 @@ import shap
 
 def explain_model(model, X):
     shap.initjs()
-    # model = xgboost.train({"learning_rate": 0.01}, xgboost.DMatrix(X, label=y), 100)
-    # explain the model's predictions using SHAP values
-    # (same syntax works for LightGBM, CatBoost, and scikit-learn models)
     explainer = shap.TreeExplainer(model)
     shap_values = explainer.shap_values(X)
     # create a SHAP dependence plot to show the effect of a single feature across the whole dataset

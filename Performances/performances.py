@@ -8,7 +8,7 @@ def get_performances(true, pred):
     return {
         'f-score': f_measure(true, pred),
         'precision': precision(true, pred),
-        'recall': recall(true, pred)
+        'recall': recall(true, pred),
     }
 
 
