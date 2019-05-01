@@ -70,13 +70,13 @@ def extract_meaningful_words_distance(df):
 
 def extract_distance_from_offensive(df):
     tf_idf_difference = get_meaningful_words_tf_idf_difference(df).sort_values(by=0, axis=1, ascending=False)
-    offensive = tf_idf_difference.iloc[:, 0:20]
+    offensive = tf_idf_difference.iloc[:, 0:100]
     return get_distance_df(df, 'offensive_distance', offensive)
 
 
 def extract_distance_from_not_offensive(df):
     tf_idf_difference = get_meaningful_words_tf_idf_difference(df).sort_values(by=0, axis=1, ascending=False)
-    not_offensive = tf_idf_difference.iloc[:, -20:-1]
+    not_offensive = tf_idf_difference.iloc[:, -100:-1]
     return get_distance_df(df, 'not_offensive_distance', not_offensive)
 
 
