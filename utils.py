@@ -1,5 +1,6 @@
 import pandas as pd
 from nltk.tokenize import word_tokenize
+from scipy.spatial import distance
 
 
 def get_abusive_df(df):
@@ -86,6 +87,14 @@ def create_stop_words_list(dataframe, threshold):
             stop_words.append(token)
 
     return stop_words
+
+
+def calculate_distance(a, b, distance_type='euclidean'):
+    if distance_type == 'euclidean':
+        return distance.euclidean(a, b)
+    if distance_type == 'cosine':
+        return distance.cosine(a, b)
+    return None
 
 
 def read_to_df():

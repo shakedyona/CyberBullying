@@ -1,5 +1,4 @@
 from gensim.corpora import WikiCorpus
-from Embedding.word2vec import get_model, train
 import csv
 
 
@@ -18,18 +17,9 @@ def create_wiki_corpus(inp="hewiki-latest-pages-articles.xml.bz2", outp="wiki3.h
     output.close()
 
 
-def get_word_vector(model, word):
-    return model.wv[word]
-
-
 def create_our_corpus(inp='corpus.csv', outp='corpus.txt'):
     with open(inp) as csvfile, open(outp, 'w') as txtFile:
         readCSV = csv.reader(csvfile, delimiter=',')
         for row in readCSV:
             txtFile.write(' '.join(row))
     print('done..')
-
-
-m = get_model("our.corpus.word2vec.model")
-
-print(get_word_vector(m, "ימח"))
