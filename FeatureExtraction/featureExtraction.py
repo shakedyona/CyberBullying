@@ -9,6 +9,7 @@ import utils
 
 folder_name = None
 
+
 def get_functions_dictionary():
     return {
         'tfidf': extract_tf_idf,
@@ -63,6 +64,18 @@ def extract_meaningful_words_distance(df):
     return df_abusive_words
 
 
+def get_meaningful_words_tf_idf_difference(df):
+    df_neg = utils.get_abusive_df(df)
+    df_pos = utils.get_no_abusive_df(df)
+    posts = [' '.join(df_neg['text'].tolist()), ' '.join(df_pos['text'].tolist())]
+
+    tfidf = TfidfVectorizer(stop_words=utils.get_stop_words(), ngram_range=(1, 2))
+    x = tfidf.fit_transform(posts)
+    x = x[0,:] - x[1,:]
+    df_tf_idf = pd.DataFrame(x.toarray(), columns=tfidf.get_feature_names())
+    return df_tf_idf
+
+
 def extract_features(df, features,myfolder):
     global folder_name
     folder_name = myfolder
@@ -76,13 +89,4 @@ def extract_features(df, features,myfolder):
     return features_df
 
 
-def get_meaningful_words_tf_idf_difference(df):
-    df_neg = utils.get_abusive_df(df)
-    df_pos = utils.get_no_abusive_df(df)
-    posts = [' '.join(df_neg['text'].tolist()), ' '.join(df_pos['text'].tolist())]
 
-    tfidf = TfidfVectorizer(stop_words=utils.get_stop_words(), ngram_range=(1, 2))
-    x = tfidf.fit_transform(posts)
-    x = x[0,:] - x[1,:]
-    df_tf_idf = pd.DataFrame(x.toarray(), columns=tfidf.get_feature_names())
-    return df_tf_idf

@@ -3,15 +3,15 @@ from nltk.tokenize import word_tokenize
 
 
 def get_abusive_df(df):
-    return df.loc[df['cb_level'] == '3']
+    return df.loc[df['cb_level'] == 3]
 
 
 def get_no_abusive_df(df):
-    return df.loc[df['cb_level'] == '1']
+    return df.loc[df['cb_level'] == 1]
 
 
 def get_tagged_posts(df):
-    return df.loc[(df['cb_level'] == '1') | (df['cb_level'] == '3')]
+    return df.loc[(df['cb_level'] == 1) | (df['cb_level'] == 3)]
 
 
 def file_to_list(path, encoding='cp1255', header=True):
@@ -95,7 +95,7 @@ def read_to_df():
     """
     path = 'dataNew.csv'
     cols = ['id', 'time', 'source', 'sub_source', 'writer', 'link', 'text', 'cb_level']
-    df = pd.read_csv(path, names=cols)
+    df = pd.read_csv(path, names=cols, header=0)
     return get_tagged_posts(df)
 
 

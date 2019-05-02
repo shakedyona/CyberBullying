@@ -11,7 +11,8 @@ def preprocess(df):
     df.drop_duplicates(subset='id', inplace=True)
     df.dropna(inplace=True)
     for index, row in df.iterrows():
-        row['text'] = re.sub(r'[^א-ת!]+', ' ', row['text'])
+        value = re.sub(r'[^א-ת!]+', ' ', row['text'])
+        df.set_value(index, 'text', value)
     df.reset_index(drop=True, inplace=True)
     return df
 
