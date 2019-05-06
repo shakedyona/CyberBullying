@@ -11,7 +11,6 @@ from Embedding.word2vec import get_model
 
 folder_name = None
 
-
 def get_functions_dictionary():
     return {
         'tfidf': extract_tf_idf,
