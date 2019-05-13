@@ -48,6 +48,13 @@ def traverse(word):
     return word
 
 
+def get_offensive_words():
+    offensive_words = 'offensive_words.csv'  # todo: this in main?
+    df_offensive = pd.read_csv(offensive_words, names=['words'])
+    offensive = df_offensive['words'].tolist()
+    return offensive
+
+
 def get_stop_words():
     """
     gets list of stop words from a file

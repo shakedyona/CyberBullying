@@ -8,3 +8,10 @@ def write_performances(folder_name,auc_list,performances_list,datetime_object):
     performances_df.to_csv(folder_name+r'\logger.csv', sep=',', mode='a')
 
 
+def write_features(folder_name,features):
+    my_features = open(folder_name+r'\features.txt', 'w')
+    for f in features:
+        my_features.write(str(f)+'\n')
+    my_features.close()
+
+
