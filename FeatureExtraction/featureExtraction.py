@@ -36,7 +36,7 @@ def extract_wmd_offensive(df):
     offensive_words_tf_idf = list(offensive_words_tf_idf.columns.values)
     m_our = get_model(r"C:\Users\shake\PycharmProjects\CyberBullying_1\Embedding\our.corpus.word2vec.model")
     m_our.init_sims(replace=True)  # Normalizes the vectors in the word2vec class.
-    df_wmd_offensive['wmd_off_tf_idf'] = df['text'].apply(
+    df_wmd_offensive['wmd_off_tfidf'] = df['text'].apply(
         lambda x:
         float("{0:.4f}".format(m_our.wmdistance(offensive_words_tf_idf, word_tokenize(x))))
     )
@@ -51,7 +51,7 @@ def extract_wmd_not_offensive(df):
     not_offensive_words_tf_idf = list(not_offensive.columns.values)
     m_our = get_model(r"C:\Users\shake\PycharmProjects\CyberBullying_1\Embedding\our.corpus.word2vec.model")
     m_our.init_sims(replace=True)  # Normalizes the vectors in the word2vec class.
-    df_wmd_not_offensive['wmd_not_off_tf_idf'] = df['text'].apply(
+    df_wmd_not_offensive['wmd_not_off_tfidf'] = df['text'].apply(
         lambda x:
         float("{0:.4f}".format(m_our.wmdistance(not_offensive_words_tf_idf, word_tokenize(x))))
     )
