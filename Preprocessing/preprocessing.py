@@ -10,9 +10,10 @@ def preprocess(df):
     """
     df.drop_duplicates(subset='id', inplace=True)
     df.dropna(inplace=True)
-    for index, row in df.iterrows():
-        value = re.sub(r'[^א-ת!]+', ' ', row['text'])
-        df.set_value(index, 'text', value)
+    df['text'] = df['text'].apply(
+        lambda x:
+        re.sub(r'[^א-ת!]+', ' ', x)
+    )
     df.reset_index(drop=True, inplace=True)
     return df
 

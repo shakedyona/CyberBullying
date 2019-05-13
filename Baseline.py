@@ -5,9 +5,10 @@ import Performances.performances as per
 
 
 def run_baseline(tagged_df):
-    offensive_words = 'offensive_words.csv'  # todo: this in main?
-    df_offensive = pd.read_csv(offensive_words, names=['words'])
-    offensive = df_offensive['words'].tolist()
+    # offensive_words = 'offensive_words.csv'  # todo: this in main?
+    # df_offensive = pd.read_csv(offensive_words, names=['words'])
+    # offensive = df_offensive['words'].tolist()
+    offensive = utils.get_offensive_words()
     df_compare = pd.DataFrame(columns=['Text', 'Algorithm classify', 'Original classify'])
     for index, row in tagged_df.iterrows():
         tokens = pre.tokenize_post(str(row.text))

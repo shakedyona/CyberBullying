@@ -27,17 +27,24 @@ tagged_df = utils.read_to_df()  # Vigo data
 # pre process
 tagged_df = pre.preprocess(tagged_df)
 # extract features
-X = fe.extract_features(tagged_df,
-                        ['post_length',
+feature_list = ['post_length',
                          'tfidf',
                          'topics',
                          'screamer',
                          'words',
-                         'offensive_distance',
-                         'not_offensive_distance'], folder_name)
-
+                         'off_dis',
+                         'not_off_dis',
+                'wmd_off',
+                'wmd_not_off']
+X = fe.extract_features(tagged_df, feature_list, folder_name)
+Logger.write_features(folder_name, feature_list)
 y = (tagged_df['cb_level'] == 3).astype(int)
 X = X.drop(columns=['id'])
+
+# index_not_offensive = 389
+# index_offensive = 1546
+# X_shap = X.iloc[index_not_offensive: index_offensive + 1]
+
 # split data to train and test
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 
@@ -88,8 +95,8 @@ vis.plot_roc_curve(roc_auc_nb, fpr_nb, tpr_nb, 'naive bayes')
 vis.plot_models_compare(performances_bl, performances_xgb, performances_rf, performances_nb)
 
 # SHAP for XGBoost:
+# explain_model(xgbObj.get_booster(), X_shap, folder_name)
 explain_model(xgbObj.get_booster(), X_test, folder_name)
-
 Logger.write_performances(folder_name,auc_list,performances_list,datetime_object)
 
 

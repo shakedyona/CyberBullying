@@ -19,7 +19,7 @@ class XGBoost(MLModel):
         d_train = xgb.DMatrix(self.x_train, label=self.y_train)
         d_test = xgb.DMatrix(self.x_test)
         self.bst = xgb.train(params, d_train, num_boost_round=num_boost_round)
-        y_pred = self.bst.predict(d_test,output_margin=True)
+        y_pred = self.bst.predict(d_test, output_margin=True)
         # self.classifier = xgb.XGBClassifier(objective='binary:logistic', max_depth=6, learning_rate=0.001,
         # n_estimators=550, subsample=0.7, scale_pos_weight=1)
         # self.bst = self.classifier.fit(train_X, train_y)
