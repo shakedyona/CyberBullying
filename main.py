@@ -22,20 +22,21 @@ if not os.path.exists(folder_name):
     os.makedirs(folder_name)
 
 # get tagged df
-tagged_df = utils.read_to_df()  # Vigo data
-# tagged_df = utils.create_csv_from_keepers_files()  # Keepers data
+# tagged_df = utils.read_to_df()  # Vigo data
+tagged_df = utils.create_csv_from_keepers_files()  # Keepers data
 # pre process
+print("pre-processing..")
 tagged_df = pre.preprocess(tagged_df)
 # extract features
+print("extract features..")
+
 feature_list = ['post_length',
                          'tfidf',
                          'topics',
                          'screamer',
                          'words',
                          'off_dis',
-                         'not_off_dis',
-                'wmd_off',
-                'wmd_not_off']
+                         'not_off_dis']
 X = fe.extract_features(tagged_df, feature_list, folder_name)
 Logger.write_features(folder_name, feature_list)
 y = (tagged_df['cb_level'] == 3).astype(int)
@@ -46,16 +47,23 @@ X = X.drop(columns=['id'])
 # X_shap = X.iloc[index_not_offensive: index_offensive + 1]
 
 # split data to train and test
+print("split train and test..")
+
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 
 performances_list = {}
 auc_list = {}
 # 1.baseline
+
+print("run baseline..")
+
 y_pred_bl = bl.run_baseline(tagged_df)
 performances_bl = per.get_performances(y, y_pred_bl)
 performances_list['baseline'] = performances_bl
 
 # 2.XGBoost
+print("run XGBoost..")
+
 xgbObj = xgb.XGBoost(X_train, y_train, X_test, y_test)
 num_boost_round = xgbObj.cross_validation()
 y_pred = xgbObj.train_predict(num_boost_round=num_boost_round)
@@ -64,6 +72,7 @@ performances_xgb = per.get_performances(y_test, y_pred_bin)
 performances_list['XGBoost'] = performances_xgb
 
 # 3.Random forest todo: add cross validation
+print("run Random Forest..")
 rf_obj = rf.RandomForest(X_train, y_train, X_test, y_test)
 y_pred_rf = rf_obj.train_predict()
 y_pred_bin1 = np.where(y_pred_rf > 0.5, 1, 0)
@@ -71,6 +80,7 @@ performances_rf = per.get_performances(y_test, y_pred_bin1)
 performances_list['Random forest']= performances_rf
 
 # 4.Naive Bayes todo: add cross validation
+print("run Naive Bayes..")
 nb_obj = nb.NaiveBayes(X_train, y_train, X_test, y_test)
 y_pred_nb = nb_obj.train_predict()
 y_pred_bin2 = np.where(y_pred_nb > 0.5, 1, 0)
