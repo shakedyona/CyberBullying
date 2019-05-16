@@ -87,8 +87,8 @@ def extract_topics(df):
 def contains_screamer(df):
     df_contains = pd.DataFrame(columns=['id', 'screamer'])
     df_contains['id'] = df['id'].tolist()
-    for index, row in df.iterrows():
-        df_contains['screamer'] = df['text'].apply(lambda x: 1 if '!!' in x else 0)
+    # for index, row in df.iterrows():
+    df_contains['screamer'] = df['text'].apply(lambda x: 1 if '!!' in x else 0)
     return df_contains
 
 

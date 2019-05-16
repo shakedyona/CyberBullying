@@ -22,8 +22,8 @@ if not os.path.exists(folder_name):
     os.makedirs(folder_name)
 
 # get tagged df
-# tagged_df = utils.read_to_df()  # Vigo data
-tagged_df = utils.create_csv_from_keepers_files()  # Keepers data
+tagged_df = utils.read_to_df()  # Vigo data
+# tagged_df = utils.create_csv_from_keepers_files()  # Keepers data
 # pre process
 print("pre-processing..")
 tagged_df = pre.preprocess(tagged_df)
