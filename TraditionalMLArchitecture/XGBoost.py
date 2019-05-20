@@ -1,3 +1,5 @@
+from sklearn.model_selection import GridSearchCV
+
 from TraditionalMLArchitecture.MLModel import MLModel
 import xgboost as xgb
 
@@ -25,6 +27,25 @@ class XGBoost(MLModel):
         # self.bst = self.classifier.fit(train_X, train_y)
         # y_pred = self.classifier.predict_proba(test_X)[:, 1]
         return y_pred
+
+    def grid_search(self):
+        classifier = xgb.XGBClassifier(objective='binary:logistic', max_depth=6, learning_rate=0.001,
+                                       n_estimators=550, subsample=0.7, scale_pos_weight=1)
+        grid_param = {
+            'n_estimators': [100, 300, 500, 800, 1000],
+            'criterion': ['gini', 'entropy'],
+            'bootstrap': [True, False]
+        }
+        gd_sr = GridSearchCV(estimator=classifier,
+                             param_grid=grid_param,
+                             scoring='accuracy',
+                             cv=5,
+                             n_jobs=-1)
+        gd_sr.fit(X_train, y_train)
+        best_parameters = gd_sr.best_params_
+        print(best_parameters)
+        best_result = gd_sr.best_score_
+        print(best_result)
 
     def cross_validation(self, params=None):
         if params is None:

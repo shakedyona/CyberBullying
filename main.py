@@ -51,6 +51,14 @@ print("split train and test..")
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 
+# x_train_nb = X_train.filter(items=['text'], axis=1)
+# x_test_nb = X_test.filter(items=['text'], axis=1)
+# y_train_nb = y_train
+# y_test_nb = y_test
+#
+# X_train = X_train.drop(columns=['text', 'cb_level'])
+# X_test = X_test.drop(columns=['text', 'cb_level'])
+
 performances_list = {}
 auc_list = {}
 # 1.baseline
@@ -77,10 +85,12 @@ rf_obj = rf.RandomForest(X_train, y_train, X_test, y_test)
 y_pred_rf = rf_obj.train_predict()
 y_pred_bin1 = np.where(y_pred_rf > 0.5, 1, 0)
 performances_rf = per.get_performances(y_test, y_pred_bin1)
-performances_list['Random forest']= performances_rf
+performances_list['Random forest'] = performances_rf
+# rf_obj.grid_search()
 
 # 4.Naive Bayes todo: add cross validation
 print("run Naive Bayes..")
+# nb_obj = nb.NaiveBayes(x_train_nb, y_train_nb, x_test_nb, y_test_nb)
 nb_obj = nb.NaiveBayes(X_train, y_train, X_test, y_test)
 y_pred_nb = nb_obj.train_predict()
 y_pred_bin2 = np.where(y_pred_nb > 0.5, 1, 0)
