@@ -87,8 +87,7 @@ def extract_topics(df):
 def contains_screamer(df):
     df_contains = pd.DataFrame(columns=['id', 'screamer'])
     df_contains['id'] = df['id'].tolist()
-    for index, row in df.iterrows():
-        df_contains['screamer'] = df['text'].apply(lambda x: 1 if '!!' in x else 0)
+    df_contains['screamer'] = df['text'].apply(lambda x: 1 if '!!' in x else 0)
     return df_contains
 
 
@@ -131,8 +130,8 @@ def get_distance_df(df, column_name, words_difference, distance_type='euclidean'
     df_offensive_distance = pd.DataFrame(columns=['id', column_name])
     df_offensive_distance['id'] = df['id'].tolist()
 
-    m_wiki = get_model(r"C:\Users\shake\PycharmProjects\CyberBullying_1\Embedding\wiki.he.word2vec.model")
-    m_our = get_model(r"C:\Users\shake\PycharmProjects\CyberBullying_1\Embedding\our.corpus.word2vec.model")
+    m_wiki = get_model(r"Embedding/wiki.he.word2vec.model")
+    m_our = get_model(r"Embedding/our.corpus.word2vec.model")
 
     df_offensive_distance[column_name] = df['text'].apply(
         lambda x:
