@@ -8,7 +8,7 @@ import utils
 import Embedding.word2vec as wv
 from Embedding.word2vec import get_model
 import gensim.models.keyedvectors as word2vec
-
+from sklearn.feature_extraction.text import CountVectorizer
 
 folder_name = None
 
@@ -141,14 +141,26 @@ def get_distance_df(df, column_name, words_difference, distance_type='euclidean'
     return df_offensive_distance
 
 
+def get_vectorizing(df):
+    posts = df['text'].values
+    vect = CountVectorizer(max_df=0.6, min_df=0.01, stop_words=utils.get_stop_words())
+    vect.fit(posts)
+    simple_train_dtm = vect.transform(posts)
+    df_vectorizing = pd.DataFrame(simple_train_dtm.toarray(), columns=vect.get_feature_names())
+    features_df = pd.DataFrame(columns=['id'])
+    features_df['id'] = df['id'].tolist()
+    features_df = pd.merge(features_df, df_vectorizing, on='id')
+
 def extract_features(df, features,myfolder):
     global folder_name
     folder_name = myfolder
     functions_dict = get_functions_dictionary()
     features_df = pd.DataFrame(columns=['id'])
     # features_df = pd.DataFrame(columns=['id','text'])  # todo
+    # features_df = pd.DataFrame(columns=['id', 'text', 'cb_level'])  # todo
     features_df['id'] = df['id'].tolist()
     # features_df['text'] = df['text'].tolist()  # todo
+    # features_df['cb_level'] = df['cb_level'].tolist()  # todo
     for feature in features:
         features_df = pd.merge(features_df, functions_dict[feature](df), on='id')
     return features_df

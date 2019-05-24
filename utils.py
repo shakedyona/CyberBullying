@@ -115,15 +115,15 @@ def read_to_df():
     return get_tagged_posts(df)
 
 
-def create_csv_from_keepers_files(folder_path = 'keepersData'):
-    path_neg = folder_path + '/sentences.neg'
-    path_pos = folder_path + '/sentences.pos'
+def create_csv_from_keepers_files(folder_path = r'keepersData'):
+    path_neg = folder_path + r"/sentences.neg"
+    path_pos = folder_path + r"/sentences.pos"
     cols = ['id', 'text', 'cb_level']
     df_neg = pd.DataFrame(columns=cols)
     df_pos = pd.DataFrame(columns=cols)
-    with open(path_neg, 'r') as f:
+    with open(path_neg, 'r', encoding="utf8") as f:
         df_neg['text'] = f.readlines()
-    with open(path_pos, 'r') as f:
+    with open(path_pos, 'r', encoding="utf8") as f:
         df_pos['text'] = f.readlines()
     df_neg['cb_level'] = 3
     df_pos['cb_level'] = 1
