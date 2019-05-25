@@ -24,7 +24,6 @@ def get_functions_dictionary():
         'not_off_dis': extract_distance_from_not_offensive,
         'wmd_off': extract_wmd_offensive,
         'wmd_not_off': extract_wmd_not_offensive
-
     }
 
 
@@ -131,8 +130,8 @@ def get_distance_df(df, column_name, words_difference, distance_type='euclidean'
     df_offensive_distance = pd.DataFrame(columns=['id', column_name])
     df_offensive_distance['id'] = df['id'].tolist()
 
-    m_wiki = get_model(r"C:\Users\shake\PycharmProjects\CyberBullying_1\Embedding\wiki.he.word2vec.model")
-    m_our = get_model(r"C:\Users\shake\PycharmProjects\CyberBullying_1\Embedding\our.corpus.word2vec.model")
+    m_wiki = get_model(r"C:\Users\Ronshmul\PycharmProjects\CyberBullying\Embedding\wiki.he.word2vec.model")
+    m_our = get_model(r"C:\Users\Ronshmul\PycharmProjects\CyberBullying\Embedding\our.corpus.word2vec.model")
 
     df_offensive_distance[column_name] = df['text'].apply(
         lambda x:

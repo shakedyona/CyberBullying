@@ -48,22 +48,19 @@ X = X.drop(columns=['id'])
 
 # split data to train and test
 print("split train and test..")
-
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.15)
 
 performances_list = {}
 auc_list = {}
+
 # 1.baseline
-
 print("run baseline..")
-
 y_pred_bl = bl.run_baseline(tagged_df)
 performances_bl = per.get_performances(y, y_pred_bl)
 performances_list['baseline'] = performances_bl
 
 # 2.XGBoost
 print("run XGBoost..")
-
 xgbObj = xgb.XGBoost(X_train, y_train, X_test, y_test)
 num_boost_round = xgbObj.cross_validation()
 y_pred = xgbObj.train_predict(num_boost_round=num_boost_round)
@@ -79,7 +76,7 @@ y_pred_bin1 = np.where(y_pred_rf > 0.5, 1, 0)
 performances_rf = per.get_performances(y_test, y_pred_bin1)
 performances_list['Random forest']= performances_rf
 
-# 4.Naive Bayes todo: add cross validation
+# 4.Naive Bayes
 print("run Naive Bayes..")
 nb_obj = nb.NaiveBayes(X_train, y_train, X_test, y_test)
 y_pred_nb = nb_obj.train_predict()
@@ -88,6 +85,7 @@ performances_nb = per.get_performances(y_test, y_pred_bin2)
 performances_list['Naive Bayes'] = performances_nb
 
 # visualization
+print('roc & auc')
 roc_auc_bl, fpr_bl, tpr_bl = per.get_roc_auc(y, y_pred_bl)
 auc_list['baseline'] = roc_auc_bl
 roc_auc_xgb, fpr_xgb, tpr_xgb = per.get_roc_auc(y_test, y_pred)
@@ -101,12 +99,11 @@ vis.plot_roc_curve(roc_auc_bl, fpr_bl, tpr_bl,'baseline')
 vis.plot_roc_curve(roc_auc_xgb, fpr_xgb, tpr_xgb, 'xgboost')
 vis.plot_roc_curve(roc_auc_rf, fpr_rf, tpr_rf, 'random forest')
 vis.plot_roc_curve(roc_auc_nb, fpr_nb, tpr_nb, 'naive bayes')
-
 vis.plot_models_compare(performances_bl, performances_xgb, performances_rf, performances_nb)
-
 # SHAP for XGBoost:
 # explain_model(xgbObj.get_booster(), X_shap, folder_name)
 explain_model(xgbObj.get_booster(), X_test, folder_name)
+print('check')
 Logger.write_performances(folder_name,auc_list,performances_list,datetime_object)
-
+print('end')
 
