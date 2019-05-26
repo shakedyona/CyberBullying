@@ -28,7 +28,7 @@ class XGBoost(MLModel):
         # y_pred = self.classifier.predict_proba(test_X)[:, 1]
         return y_pred
 
-    def grid_search(self):
+    def grid_search(self, X_train, y_train):
         classifier = xgb.XGBClassifier(objective='binary:logistic', max_depth=6, learning_rate=0.001,
                                        n_estimators=550, subsample=0.7, scale_pos_weight=1)
         grid_param = {

@@ -1,6 +1,7 @@
 import pandas as pd
 from nltk.tokenize import word_tokenize
 from scipy.spatial import distance
+from sklearn.externals import joblib
 
 
 def get_abusive_df(df):
@@ -135,3 +136,9 @@ def create_csv_from_keepers_files(folder_path = r'keepersData'):
     return df
 
 
+def save_model(model, path='outputs/model.pkl'):
+    joblib.dump(model, path)
+
+
+def get_model(path='outputs/model.pkl'):
+    return joblib.load(path)
