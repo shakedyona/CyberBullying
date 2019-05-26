@@ -1,6 +1,4 @@
 import matplotlib.pyplot as plt
-
-import Logger
 import utils
 import os
 import pandas as pd
@@ -9,7 +7,7 @@ import wordcloud
 import numpy as np
 
 
-def plot_tf_idf_post(dictionary_tf_idf, title, unique=False):
+def plot_tf_idf_post(dictionary_tf_idf, title):
     dic_post = dict(dictionary_tf_idf[title])
     dic_post_travers = {}
     for term,val in dic_post.items():
@@ -21,7 +19,7 @@ def plot_tf_idf_post(dictionary_tf_idf, title, unique=False):
     plt.show()
 
 
-def plot_length_posts(dictionary_length, title, unique=False):
+def plot_length_posts(dictionary_length, title):
     df2 = pd.DataFrame.from_dict(dictionary_length, orient='index').sort_values(by=0, ascending=False)
     pl = df2.plot(kind='bar', figsize=(15, 7), fontsize=8, legend=False, title=utils.traverse(title))
     for p in pl.patches:
@@ -29,7 +27,7 @@ def plot_length_posts(dictionary_length, title, unique=False):
     plt.show()
 
 
-def create_word_cloud(no_topics, lda, feature_names,name_image, folder_name):
+def create_word_cloud(no_topics, lda, feature_names, folder_name):
     font_path = os.path.join(os.path.join(os.environ['WINDIR'], 'Fonts'), 'ahronbd.ttf')
     for i in range(0, no_topics):
         d = dict(zip(utils.traverse(feature_names), lda.components_[i]))
@@ -50,7 +48,7 @@ def print_tf_idf_dict(tf_idf_dict):
             print('word: ' + str(v[0]) + ', tf-idf: ' + str(v[1]))
 
 
-def plot_part_of_day(dictionary_time, title, unique=False):
+def plot_part_of_day(dictionary_time, title):
     df2 = pd.DataFrame.from_dict(dictionary_time, orient='index').sort_values(by=0, ascending=False)
     pl = df2.plot(kind='bar', figsize=(15, 7), fontsize=8, legend=False, title=utils.traverse(title))
     for p in pl.patches:
@@ -85,7 +83,6 @@ def plot_models_compare(per1, per2, per3, per4):
     ax.bar(index+0.25, [per2[key] for key in sorted(per2.keys())], color=(0.8, 0.5, 0.4, 0.6), width=0.2, label='XGBoost')
     ax.bar(index+0.5, [per3[key] for key in sorted(per3.keys())], color=(0.2, 0.8, 0.4, 0.6), width=0.2, label='Random forest')
     ax.bar(index+0.75, [per4[key] for key in sorted(per4.keys())], color=(0.5, 0.8, 0.3, 0.5), width=0.2, label='Naive bayes')
-
     ax.set_xlabel('Performances')
     ax.set_ylabel('')
     ax.set_title('Model compare')

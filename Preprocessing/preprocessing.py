@@ -28,7 +28,6 @@ def tokenize_df(df):
     tokens = []
     for post in text:
         tokens = tokens + word_tokenize(post)
-
     return tokens
 
 

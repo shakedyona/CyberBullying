@@ -54,7 +54,6 @@ def plot_history(history):
     loss = history.history['loss']
     val_loss = history.history['val_loss']
     x = range(1, len(acc) + 1)
-
     plt.figure(figsize=(12, 5))
     plt.subplot(1, 2, 1)
     plt.plot(x, acc, 'b', label='Training acc')
