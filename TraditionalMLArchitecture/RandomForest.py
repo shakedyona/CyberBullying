@@ -1,5 +1,4 @@
 from sklearn.model_selection import GridSearchCV
-
 from TraditionalMLArchitecture.MLModel import MLModel
 from sklearn.ensemble import RandomForestClassifier
 
@@ -15,8 +14,8 @@ class RandomForest(MLModel):
 
     def train_predict(self, params=None):
         if params is None:
-            params = {'max_depth': 10, 'min_samples_split': 10,
-                      'n_estimators': 200}
+            params = {'max_depth': 15, 'min_samples_split': 8,
+                      'n_estimators': 300}
         rf = RandomForestClassifier(n_estimators=200, max_depth=10, min_samples_split=10)
         rf.fit(self.x_train, self.y_train)
         y_pred = rf.predict_proba(self.x_test)
@@ -27,11 +26,8 @@ class RandomForest(MLModel):
         classifier = RandomForestClassifier(n_estimators=200, max_depth=10, min_samples_split=10)
         grid_param = {
             'max_depth': [5, 10, 80, 90],
-            # 'max_features': [2, 3, 4, 5, 6],
-            # 'min_samples_leaf': [3, 4, 5, 6, 8],
             'min_samples_split': [5, 8, 10, 12],
             'n_estimators': [100, 200, 300, 500, 1000]
-            # 'criterion': ['gini', 'entropy']
         }
 
         gd_sr = GridSearchCV(estimator=classifier,
@@ -45,6 +41,7 @@ class RandomForest(MLModel):
         print(best_parameters)
         best_result = gd_sr.best_score_
         print(best_result)
+
 
     def cross_validation(self, params=None):
         # if params is None:

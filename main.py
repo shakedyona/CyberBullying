@@ -48,7 +48,7 @@ X = X.drop(columns=['id'])
 
 # split data to train and test
 print("split train and test..")
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.15)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 
 # x_train_nb = X_train.filter(items=['text'], axis=1)
 # x_test_nb = X_test.filter(items=['text'], axis=1)
@@ -73,10 +73,11 @@ xgbObj = xgb.XGBoost(X_train, y_train, X_test, y_test)
 num_boost_round = xgbObj.cross_validation()
 y_pred = xgbObj.train_predict(num_boost_round=num_boost_round)
 y_pred_bin = np.where(y_pred > 0.5, 1, 0)
+# xgbObj.grid_search()
 performances_xgb = per.get_performances(y_test, y_pred_bin)
 performances_list['XGBoost'] = performances_xgb
 
-# 3.Random forest todo: add cross validation
+# 3.Random forest
 print("run Random Forest..")
 rf_obj = rf.RandomForest(X_train, y_train, X_test, y_test)
 y_pred_rf = rf_obj.train_predict()
