@@ -7,8 +7,6 @@ from FeatureExtraction.LDA import create_LDA_model
 import utils
 import Embedding.word2vec as wv
 from Embedding.word2vec import get_model
-import gensim.models.keyedvectors as word2vec
-
 
 folder_name = None
 
@@ -77,8 +75,8 @@ def extract_post_length(df):
 
 
 def extract_topics(df):
-    dt_matrix = create_LDA_model(df, 3, '',folder_name)
-    features = pd.DataFrame(dt_matrix, columns=['T1', 'T2', 'T3'])
+    dt_matrix = create_LDA_model(df, 4, '',folder_name)
+    features = pd.DataFrame(dt_matrix, columns=['T1', 'T2', 'T3', 'T4'])
     features['id'] = df['id'].tolist()
     return features
 
@@ -86,7 +84,6 @@ def extract_topics(df):
 def contains_screamer(df):
     df_contains = pd.DataFrame(columns=['id', 'screamer'])
     df_contains['id'] = df['id'].tolist()
-    # for index, row in df.iterrows():
     df_contains['screamer'] = df['text'].apply(lambda x: 1 if '!!' in x else 0)
     return df_contains
 
@@ -130,8 +127,8 @@ def get_distance_df(df, column_name, words_difference, distance_type='euclidean'
     df_offensive_distance = pd.DataFrame(columns=['id', column_name])
     df_offensive_distance['id'] = df['id'].tolist()
 
-    m_wiki = get_model(r"C:\Users\Ronshmul\PycharmProjects\CyberBullying\Embedding\wiki.he.word2vec.model")
-    m_our = get_model(r"C:\Users\Ronshmul\PycharmProjects\CyberBullying\Embedding\our.corpus.word2vec.model")
+    m_wiki = get_model(r"Embedding/wiki.he.word2vec.model")
+    m_our = get_model(r"Embedding/our.corpus.word2vec.model")
 
     df_offensive_distance[column_name] = df['text'].apply(
         lambda x:

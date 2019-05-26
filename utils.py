@@ -125,8 +125,8 @@ def create_csv_from_keepers_files(folder_path = r'keepersData'):
         df_neg['text'] = f.readlines()
     with open(path_pos, 'r', encoding="utf8") as f:
         df_pos['text'] = f.readlines()
-    df_neg['cb_level'] = '3'
-    df_pos['cb_level'] = '1'
+    df_neg['cb_level'] = 3
+    df_pos['cb_level'] = 1
 
     df_neg = df_neg.reset_index(drop=True)
     df_pos = df_pos.reset_index(drop=True)
