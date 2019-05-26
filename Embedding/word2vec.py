@@ -34,11 +34,13 @@ def get_word_vector(model, word):
 def get_post_vector(our_word2vec_model, wiki_word2vec_model, post):
     post = word_tokenize(post)
     # remove out-of-vocabulary words
-    post = [word for word in post if word in our_word2vec_model.wv.vocab]
-    if len(post) == 0:
-        post = [word for word in post if word in wiki_word2vec_model.wv.vocab]
-        if len(post) == 0:
-            raise ValueError('words not in vocabulary')
-        return np.mean(wiki_word2vec_model[post], axis=0)
+    postEmbedding = []
+    for word in post:
+        if word in our_word2vec_model.wv.vocab:
+            postEmbedding.append(our_word2vec_model.wv[word])
+        elif word in wiki_word2vec_model.wv.vocab:
+            postEmbedding.append(wiki_word2vec_model.wv[word])
 
-    return np.mean(our_word2vec_model[post], axis=0)
+    if len(postEmbedding) == 0:
+        return np.zeros((1, 100))
+    return np.mean(postEmbedding)
