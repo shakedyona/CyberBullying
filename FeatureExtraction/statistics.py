@@ -17,13 +17,12 @@ def create_tf_idf(dataframe, num_of_words):
     # get the text column
     posts = dataframe['text'].tolist()
     dict = {}
-    # create a vocabulary of words,
+    # create a vocabulary of words
     cv = CountVectorizer(max_df=0.85, stop_words=utils.get_stop_words())
     word_count_vector = cv.fit_transform(posts)
     tfidf_transformer = TfidfTransformer(smooth_idf=True, use_idf=True)
     tfidf_transformer.fit(word_count_vector)
 
-    # you only needs to do this once, this is a mapping of index to
     feature_names = cv.get_feature_names()
 
     # get the document that we want to extract keywords from
@@ -49,18 +48,14 @@ def extract_topn_from_vector(feature_names, sorted_items, topn=10):
     sorted_items = sorted_items[:topn]
     score_vals = []
     feature_vals = []
-
     # word index and corresponding tf-idf score
     for idx, score in sorted_items:
         # keep track of feature name and its corresponding score
         score_vals.append(round(score, 3))
         feature_vals.append(feature_names[idx])
-    # create a tuples of feature,score
-    # results = zip(feature_vals,score_vals)
     results = {}
     for idx in range(len(feature_vals)):
         results[feature_vals[idx]] = score_vals[idx]
-
     return results
 
 

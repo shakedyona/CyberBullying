@@ -16,14 +16,13 @@ def get_tagged_posts(df):
     return df.loc[(df['cb_level'] == 1) | (df['cb_level'] == 3)]
 
 
-def file_to_list(path, encoding='cp1255', header=True):
-    '''
+def file_to_list(path, encoding='cp1255'):
+    """
     Insert file data into list
     :param path:
     :param encoding:
-    :param header:
     :return:
-    '''
+    """
     try:
         with open(path, mode='r', encoding=encoding) as infile:
             myList = [line.strip('\n') for line in infile]
@@ -50,7 +49,7 @@ def traverse(word):
 
 
 def get_offensive_words():
-    offensive_words = 'offensive_words.csv'  # todo: this in main?
+    offensive_words = 'offensive_words.csv'
     df_offensive = pd.read_csv(offensive_words, names=['words'])
     offensive = df_offensive['words'].tolist()
     return offensive
@@ -83,7 +82,7 @@ def create_stop_words_list(dataframe, threshold):
             if token in term_df:
                 list_posts = term_df[token]
                 if index_post not in list_posts:
-                    term_df[token].append(index_post)  # todo: change from indexes to counter
+                    term_df[token].append(index_post)  # change from indexes to counter
             else:
                 term_df[token] = []
                 term_df[token].append(index_post)

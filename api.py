@@ -30,15 +30,14 @@ def train_file(file):
 
     # split data to train and test
     print("split train and test..")
-
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 
     # 2.XGBoost
     print("run XGBoost..")
-
     xgbObj = xgb.XGBoost(X_train, y_train, X_test, y_test)
     num_boost_round = xgbObj.cross_validation()
-    y_pred = xgbObj.train_predict(num_boost_round=num_boost_round)
+    model = xgbObj.train(num_boost_round=num_boost_round)
+    y_pred = xgbObj.predict(model)
     utils.save_model(xgbObj.get_booster(), )
 
 

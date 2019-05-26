@@ -16,7 +16,6 @@ from Explainability.explanation import explain_model
 
 # logger
 datetime_object = datetime.datetime.now()
-print(datetime_object)
 folder_name = r"Looger\Logger_"+str(datetime_object).replace(':','-')
 if not os.path.exists(folder_name):
     os.makedirs(folder_name)
@@ -24,19 +23,12 @@ if not os.path.exists(folder_name):
 # get tagged df
 tagged_df = utils.read_to_df()  # Vigo data
 # tagged_df = utils.create_csv_from_keepers_files()  # Keepers data
-# pre process
-print("pre-processing..")
-tagged_df = pre.preprocess(tagged_df)
-# extract features
-print("extract features..")
 
-feature_list = ['post_length',
-                         'tfidf',
-                         'topics',
-                         'screamer',
-                         'words',
-                         'off_dis',
-                         'not_off_dis']
+# pre process
+tagged_df = pre.preprocess(tagged_df)
+
+# extract features
+feature_list = ['post_length', 'tfidf', 'topics', 'screamer', 'words', 'off_dis', 'not_off_dis']
 X = fe.extract_features(tagged_df, feature_list, folder_name)
 Logger.write_features(folder_name, feature_list)
 y = (tagged_df['cb_level'] == 3).astype(int)
@@ -47,74 +39,58 @@ X = X.drop(columns=['id'])
 # X_shap = X.iloc[index_not_offensive: index_offensive + 1]
 
 # split data to train and test
-print("split train and test..")
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
-
-# x_train_nb = X_train.filter(items=['text'], axis=1)
-# x_test_nb = X_test.filter(items=['text'], axis=1)
-# y_train_nb = y_train
-# y_test_nb = y_test
-#
-# X_train = X_train.drop(columns=['text', 'cb_level'])
-# X_test = X_test.drop(columns=['text', 'cb_level'])
 
 performances_list = {}
 auc_list = {}
 
 # 1.baseline
-print("run baseline..")
 y_pred_bl = bl.run_baseline(tagged_df)
 performances_bl = per.get_performances(y, y_pred_bl)
 performances_list['baseline'] = performances_bl
 
 # 2.XGBoost
-print("run XGBoost..")
-xgbObj = xgb.XGBoost(X_train, y_train, X_test, y_test)
-num_boost_round = xgbObj.cross_validation()
-y_pred = xgbObj.train_predict(num_boost_round=num_boost_round)
-y_pred_bin = np.where(y_pred > 0.5, 1, 0)
-# xgbObj.grid_search()
-performances_xgb = per.get_performances(y_test, y_pred_bin)
+xgb_obj = xgb.XGBoost(X_train, y_train, X_test, y_test)
+num_boost_round = xgb_obj.cross_validation()
+xgb_classifier = xgb_obj.train(num_boost_round=num_boost_round)
+y_prob_xgb = xgb_obj.predict(xgb_classifier)
+y_pred_xgb = np.where(y_prob_xgb > 0.5, 1, 0)
+performances_xgb = per.get_performances(y_test, y_pred_xgb)
 performances_list['XGBoost'] = performances_xgb
 
 # 3.Random forest
-print("run Random Forest..")
 rf_obj = rf.RandomForest(X_train, y_train, X_test, y_test)
-y_pred_rf = rf_obj.train_predict()
-y_pred_bin1 = np.where(y_pred_rf > 0.5, 1, 0)
-performances_rf = per.get_performances(y_test, y_pred_bin1)
+rf_classifier = rf_obj.train()
+y_prob_rf = rf_obj.predict(rf_classifier)
+y_pred_rf = np.where(y_prob_rf > 0.5, 1, 0)
+performances_rf = per.get_performances(y_test, y_pred_rf)
 performances_list['Random forest'] = performances_rf
-# rf_obj.grid_search()
 
 # 4.Naive Bayes
-print("run Naive Bayes..")
-# nb_obj = nb.NaiveBayes(x_train_nb, y_train_nb, x_test_nb, y_test_nb)
 nb_obj = nb.NaiveBayes(X_train, y_train, X_test, y_test)
-y_pred_nb = nb_obj.train_predict()
-y_pred_bin2 = np.where(y_pred_nb > 0.5, 1, 0)
-performances_nb = per.get_performances(y_test, y_pred_bin2)
+nb_classifier = nb_obj.train()
+y_prob_nb = nb_obj.predict(nb_classifier)
+y_pred_nb = np.where(y_prob_nb > 0.5, 1, 0)
+performances_nb = per.get_performances(y_test, y_pred_nb)
 performances_list['Naive Bayes'] = performances_nb
 
 # visualization
-print('roc & auc')
 roc_auc_bl, fpr_bl, tpr_bl = per.get_roc_auc(y, y_pred_bl)
 auc_list['baseline'] = roc_auc_bl
-roc_auc_xgb, fpr_xgb, tpr_xgb = per.get_roc_auc(y_test, y_pred)
+roc_auc_xgb, fpr_xgb, tpr_xgb = per.get_roc_auc(y_test, y_prob_xgb)
 auc_list['XGBoost'] = roc_auc_xgb
-roc_auc_rf, fpr_rf, tpr_rf = per.get_roc_auc(y_test, y_pred_rf)
+roc_auc_rf, fpr_rf, tpr_rf = per.get_roc_auc(y_test, y_prob_rf)
 auc_list['Random forest']= roc_auc_rf
-roc_auc_nb, fpr_nb, tpr_nb = per.get_roc_auc(y_test, y_pred_nb)
+roc_auc_nb, fpr_nb, tpr_nb = per.get_roc_auc(y_test, y_prob_nb)
 auc_list['Naive Bayes'] = roc_auc_nb
-
 vis.plot_roc_curve(roc_auc_bl, fpr_bl, tpr_bl,'baseline')
 vis.plot_roc_curve(roc_auc_xgb, fpr_xgb, tpr_xgb, 'xgboost')
 vis.plot_roc_curve(roc_auc_rf, fpr_rf, tpr_rf, 'random forest')
 vis.plot_roc_curve(roc_auc_nb, fpr_nb, tpr_nb, 'naive bayes')
 vis.plot_models_compare(performances_bl, performances_xgb, performances_rf, performances_nb)
+
 # SHAP for XGBoost:
 # explain_model(xgbObj.get_booster(), X_shap, folder_name)
-explain_model(xgbObj.get_booster(), X_test, folder_name)
-print('check')
+explain_model(xgb_obj.get_booster(), X_test, folder_name)
 Logger.write_performances(folder_name,auc_list,performances_list,datetime_object)
-print('end')
 

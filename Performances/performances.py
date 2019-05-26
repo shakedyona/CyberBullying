@@ -1,7 +1,6 @@
 from sklearn.metrics import f1_score, roc_curve, auc
 from sklearn.metrics import precision_score
 from sklearn.metrics import recall_score
-import random
 
 
 def get_performances(true, pred):

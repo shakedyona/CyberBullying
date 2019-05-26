@@ -1,4 +1,4 @@
-from DeepLearningArchitecture.CNN import CNN
+#from DeepLearningArchitecture.CNN import CNN
 import utils
 import Embedding.word2vec as w2v
 import Preprocessing.preprocessing as pre

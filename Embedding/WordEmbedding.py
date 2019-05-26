@@ -9,11 +9,9 @@ def create_wiki_corpus(inp="hewiki-latest-pages-articles.xml.bz2", outp="wiki3.h
     wiki = WikiCorpus(inp, lemmatize=False, dictionary={})
     for i, text in enumerate(wiki.get_texts()):
         article = space.join([t for t in text])
-
         output.write("{}\n".format(article))
         if i % 1000 == 0:
             print("Saved " + str(i) + " articles")
-
     output.close()
 
 

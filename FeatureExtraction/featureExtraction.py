@@ -114,7 +114,6 @@ def get_meaningful_words_tf_idf_difference(df):
     df_neg = utils.get_abusive_df(df)
     df_pos = utils.get_no_abusive_df(df)
     posts = [' '.join(df_neg['text'].tolist()), ' '.join(df_pos['text'].tolist())]
-
     tfidf = TfidfVectorizer(stop_words=utils.get_stop_words(), ngram_range=(1, 2))
     x = tfidf.fit_transform(posts)
     x = x[0,:] - x[1,:]
@@ -143,9 +142,7 @@ def extract_features(df, features,myfolder):
     folder_name = myfolder
     functions_dict = get_functions_dictionary()
     features_df = pd.DataFrame(columns=['id'])
-    # features_df = pd.DataFrame(columns=['id','text'])  # todo
     features_df['id'] = df['id'].tolist()
-    # features_df['text'] = df['text'].tolist()  # todo
     for feature in features:
         features_df = pd.merge(features_df, functions_dict[feature](df), on='id')
     return features_df
