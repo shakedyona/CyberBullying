@@ -40,7 +40,8 @@ def explain_model(model, X, folder_name):
     pl.clf()
 
 
-
+def explain_class(post):
+    pass
 
 
 
