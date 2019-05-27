@@ -2,6 +2,9 @@ import pandas as pd
 from nltk.tokenize import word_tokenize
 from scipy.spatial import distance
 from sklearn.externals import joblib
+import TraditionalMLArchitecture.XGBoost as xgb
+import TraditionalMLArchitecture.RandomForest as rf
+import TraditionalMLArchitecture.NaiveBayes as nb
 
 
 def get_abusive_df(df):
@@ -104,14 +107,12 @@ def calculate_distance(a, b, distance_type='euclidean'):
     return None
 
 
-def read_to_df():
+def read_to_df(path='dataNew.csv'):
     """
     reads the csv data file to a data frame and gets only the tagged post
     :return df:
     """
-    path = 'dataNew.csv'
-    cols = ['id', 'time', 'source', 'sub_source', 'writer', 'link', 'text', 'cb_level']
-    df = pd.read_csv(path, names=cols, header=0)
+    df = pd.read_csv(path)
     return get_tagged_posts(df)
 
 
@@ -141,3 +142,7 @@ def save_model(model, path='outputs/model.pkl'):
 
 def get_model(path='outputs/model.pkl'):
     return joblib.load(path)
+
+
+def create_list_of_models():
+    return [('NB', nb.NaiveBayes().model), ('RF', rf.RandomForest().model), ('XGB', xgb.XGBoost().model)]
