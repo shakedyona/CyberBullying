@@ -13,6 +13,7 @@ import numpy as np
 import Baseline as bl
 import os
 from Explainability.explanation import explain_model
+from sklearn.metrics import accuracy_score
 
 # logger
 datetime_object = datetime.datetime.now()
@@ -50,26 +51,26 @@ performances_bl = per.get_performances(y, y_pred_bl)
 performances_list['baseline'] = performances_bl
 
 # 2.XGBoost
-xgb_obj = xgb.XGBoost(X_train, y_train, X_test, y_test)
-num_boost_round = xgb_obj.cross_validation()
-xgb_classifier = xgb_obj.train(num_boost_round=num_boost_round)
-y_prob_xgb = xgb_obj.predict(xgb_classifier)
+xgb_obj = xgb.XGBoost()
+#num_boost_round = xgb_obj.cross_validation()
+xgb_classifier = xgb_obj.train(X_train, y_train)
+y_prob_xgb = xgb_obj.predict(X_test)
 y_pred_xgb = np.where(y_prob_xgb > 0.5, 1, 0)
 performances_xgb = per.get_performances(y_test, y_pred_xgb)
 performances_list['XGBoost'] = performances_xgb
 
 # 3.Random forest
-rf_obj = rf.RandomForest(X_train, y_train, X_test, y_test)
-rf_classifier = rf_obj.train()
-y_prob_rf = rf_obj.predict(rf_classifier)
+rf_obj = rf.RandomForest()
+rf_classifier = rf_obj.train(X_train, y_train)
+y_prob_rf = rf_obj.predict(X_test)
 y_pred_rf = np.where(y_prob_rf > 0.5, 1, 0)
 performances_rf = per.get_performances(y_test, y_pred_rf)
 performances_list['Random forest'] = performances_rf
 
 # 4.Naive Bayes
-nb_obj = nb.NaiveBayes(X_train, y_train, X_test, y_test)
-nb_classifier = nb_obj.train()
-y_prob_nb = nb_obj.predict(nb_classifier)
+nb_obj = nb.NaiveBayes()
+nb_classifier = nb_obj.train(X_train, y_train)
+y_prob_nb = nb_obj.predict(X_test)
 y_pred_nb = np.where(y_prob_nb > 0.5, 1, 0)
 performances_nb = per.get_performances(y_test, y_pred_nb)
 performances_list['Naive Bayes'] = performances_nb
@@ -94,3 +95,11 @@ vis.plot_models_compare(performances_bl, performances_xgb, performances_rf, perf
 explain_model(xgb_obj.get_booster(), X_test, folder_name)
 Logger.write_performances(folder_name,auc_list,performances_list,datetime_object)
 
+acc_bl = accuracy_score(y, y_pred_bl)
+acc_xgb = accuracy_score(y_test, y_pred_xgb)
+acc_rf = accuracy_score(y_test, y_pred_rf)
+acc_nb = accuracy_score(y_test, y_pred_nb)
+print('accuracy for baseline: ', acc_bl)
+print('accuracy for xgboost: ', acc_xgb)
+print('accuracy for random forest: ', acc_rf)
+print('accuracy for naive bayes: ', acc_nb)

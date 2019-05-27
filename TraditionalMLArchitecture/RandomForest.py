@@ -4,23 +4,17 @@ from sklearn.ensemble import RandomForestClassifier
 
 
 class RandomForest(MLModel):
-    def __init__(self, x_train, y_train, x_test, y_test):
+    def __init__(self):
         super().__init__()
-        self.x_train = x_train
-        self.y_train = y_train
-        self.x_test = x_test
-        self.y_test = y_test
-        self.bst = None
+        self.model = RandomForestClassifier(n_estimators=250, max_depth=13, min_samples_split=5)
 
 
-    def train(self):
-        rf = RandomForestClassifier(n_estimators=250, max_depth=13, min_samples_split=5)
-        rf.fit(self.x_train, self.y_train)
-        return rf
+    def train(self, x_train, y_train):
+        self.model.fit(x_train, y_train)
 
 
-    def predict(self, rf):
-        y_pred = rf.predict_proba(self.x_test)
+    def predict(self, x_test):
+        y_pred = self.model.predict_proba(x_test)
         return y_pred[:, 1]
 
 

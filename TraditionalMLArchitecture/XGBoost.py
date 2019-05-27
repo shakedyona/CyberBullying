@@ -5,28 +5,23 @@ import xgboost as xgb
 
 
 class XGBoost(MLModel):
-    def __init__(self, x_train, y_train, x_test, y_test):
+    def __init__(self):
         super().__init__()
-        self.x_train = x_train
-        self.y_train = y_train
-        self.x_test = x_test
-        self.y_test = y_test
+        self.model = xgb.XGBClassifier(objective='binary:logistic', max_depth=10, learning_rate=0.01,
+                                       n_estimators=200, subsample=0.3, scale_pos_weight=1)
         self.bst = None
 
 
-    def train(self, num_boost_round):
-        classifier = xgb.XGBClassifier(objective='binary:logistic', max_depth=10, learning_rate=0.01,
-                n_estimators=200, subsample=0.3, scale_pos_weight=1, num_boost_round=num_boost_round)
-        self.bst = classifier.fit(self.x_train, self.y_train)
-        return classifier
+    def train(self, x_train, y_train):
+        self.bst = self.model.fit(x_train, y_train)
 
 
-    def predict(self, classifier):
-        y_pred = classifier.predict_proba(self.x_test)[:, 1]
+    def predict(self, x_test):
+        y_pred = self.model.predict_proba(x_test)[:, 1]
         return y_pred
 
 
-    def grid_search(self):
+    def grid_search(self, x_train, y_train):
         classifier = xgb.XGBClassifier(objective='binary:logistic', max_depth=10, learning_rate=0.01,
                                        n_estimators=200, subsample=0.3, scale_pos_weight=1)
         grid_param = {
@@ -36,19 +31,19 @@ class XGBoost(MLModel):
             'subsample': [0.3, 0.5, 0.7]
         }
         gd_sr = GridSearchCV(estimator=classifier, param_grid=grid_param, scoring='f1', cv=5, verbose=2, n_jobs=-1)
-        gd_sr.fit(self.x_train, self.y_train)
+        gd_sr.fit(x_train, y_train)
         best_parameters = gd_sr.best_params_
         print(best_parameters)
         best_result = gd_sr.best_score_
         print(best_result)
 
 
-    def cross_validation(self, params=None):
+    def cross_validation(self, x_train, y_train, params=None):
         if params is None:
             params = {'max_depth': 10, 'learning_rate': 0.01,
                       'objective': 'binary:logistic', 'scale_pos_weight': 1,
                       'n_estimators': 200, 'subsample': 0.3}
-        d_train = xgb.DMatrix(self.x_train, label=self.y_train)
+        d_train = xgb.DMatrix(x_train, label=y_train)
         xgb_cv = xgb.cv(params, d_train, nfold=10, num_boost_round=1000, metrics=['auc'], early_stopping_rounds=100)
         return xgb_cv.shape[0]  # the best number of rounds
 
