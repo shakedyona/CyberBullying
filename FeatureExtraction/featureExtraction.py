@@ -137,9 +137,7 @@ def get_distance_df(df, column_name, words_difference, distance_type='euclidean'
     return df_offensive_distance
 
 
-def extract_features(df, features,myfolder):
-    global folder_name
-    folder_name = myfolder
+def extract_features(df, features):
     functions_dict = get_functions_dictionary()
     features_df = pd.DataFrame(columns=['id'])
     features_df['id'] = df['id'].tolist()

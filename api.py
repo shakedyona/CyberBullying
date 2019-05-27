@@ -1,55 +1,58 @@
 import utils
 import Preprocessing.preprocessing as pre
 import FeatureExtraction.featureExtraction as fe
-import TraditionalMLArchitecture.XGBoost as xgb
-from sklearn.model_selection import train_test_split
-from Explainability.explanation import explain_class
-
+import TraditionalMLArchitecture.RandomForest as rf
+import Performances.performances as per
+import visualization as vis
+import numpy as np
+import os
+from Explainability.explanation import explain_model
+import pandas as pd
 import xgboost
 
-def train_file(file):
-    # get tagged df
-    tagged_df = utils.read_to_df()  # Vigo data
-    # tagged_df = utils.create_csv_from_keepers_files()  # Keepers data
-    # pre process
-    print("pre-processing..")
-    tagged_df = pre.preprocess(tagged_df)
-    # extract features
-    print("extract features..")
 
-    feature_list = ['post_length',
-                    'tfidf',
-                    'topics',
-                    'screamer',
-                    'words',
-                    'off_dis',
-                    'not_off_dis']
-    X = fe.extract_features(tagged_df, feature_list, None)
+def train_file(file_path):
+    tagged_df = utils.read_to_df(file_path)
+    tagged_df = pre.preprocess(tagged_df)
+    feature_list = ['post_length', 'tfidf', 'topics', 'screamer', 'words', 'off_dis', 'not_off_dis']
+    X = fe.extract_features(tagged_df, feature_list)
     y = (tagged_df['cb_level'] == 3).astype(int)
     X = X.drop(columns=['id'])
-
-    # split data to train and test
-    print("split train and test..")
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
-
-    # 2.XGBoost
-    print("run XGBoost..")
-    xgbObj = xgb.XGBoost(X_train, y_train, X_test, y_test)
-    num_boost_round = xgbObj.cross_validation()
-    model = xgbObj.train(num_boost_round=num_boost_round)
-    y_pred = xgbObj.predict(model)
-    utils.save_model(xgbObj.get_booster(), )
+    rf_obj = rf.RandomForest()
+    rf_obj.train(X, y)
+    utils.save_model(rf_obj.model)
 
 
 def predict(post, explainability=True):
     model = utils.get_model()
-    d = xgboost.DMatrix([post])
-    result = {'class': model.predict(d)}
+    rf_obj = rf.RandomForest()
+    rf_obj.model = model
+    tagged_df = pd.DataFrame({'id': [1], 'text': [post]})
+    tagged_df = pre.preprocess(tagged_df)
+    feature_list = ['post_length', 'tfidf', 'topics', 'screamer', 'words', 'off_dis', 'not_off_dis']
+    X = fe.extract_features(tagged_df, feature_list)
+    X = X.drop(columns=['id'])
+    y_prob_rf = rf_obj.predict(X)
+    pred = np.where(y_prob_rf > 0.5, 1, 0)
+    result = {'class': pred}
     if explainability:
         result['explain'] = explain_class(post)
     return result
 
 
-def get_performances():
+def get_performances(file_path):
     model = utils.get_model()
+    rf_obj = rf.RandomForest()
+    rf_obj.model = model
+    tagged_df = utils.read_to_df(file_path)
+    tagged_df = pre.preprocess(tagged_df)
+    feature_list = ['post_length', 'tfidf', 'topics', 'screamer', 'words', 'off_dis', 'not_off_dis']
+    X = fe.extract_features(tagged_df, feature_list)
+    X = X.drop(columns=['id'])
+    y_prob_rf = rf_obj.predict(X)
+    pred = np.where(y_prob_rf > 0.5, 1, 0)
+
+
+
+
 
