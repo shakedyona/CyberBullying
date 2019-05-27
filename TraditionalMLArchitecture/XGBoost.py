@@ -7,8 +7,8 @@ import xgboost as xgb
 class XGBoost(MLModel):
     def __init__(self):
         super().__init__()
-        self.model = xgb.XGBClassifier(objective='binary:logistic', max_depth=10, learning_rate=0.01,
-                                       n_estimators=200, subsample=0.3, scale_pos_weight=1)
+        self.model = xgb.XGBClassifier(objective='binary:logistic', max_depth=8, learning_rate=0.001,
+                                       n_estimators=150, subsample=0.3, scale_pos_weight=1)
         self.bst = None
 
 
@@ -46,6 +46,7 @@ class XGBoost(MLModel):
         d_train = xgb.DMatrix(x_train, label=y_train)
         xgb_cv = xgb.cv(params, d_train, nfold=10, num_boost_round=1000, metrics=['auc'], early_stopping_rounds=100)
         return xgb_cv.shape[0]  # the best number of rounds
+
 
     def get_booster(self):
         return self.bst
