@@ -6,7 +6,7 @@ import numpy as np
 from FeatureExtraction.LDA import create_LDA_model
 import utils
 import Embedding.word2vec as wv
-from Embedding.word2vec import get_model
+from Embedding.word2vec import get_model, get_post_vector
 
 folder_name = None
 
@@ -21,7 +21,8 @@ def get_functions_dictionary():
         'off_dis': extract_distance_from_offensive,
         'not_off_dis': extract_distance_from_not_offensive,
         'wmd_off': extract_wmd_offensive,
-        'wmd_not_off': extract_wmd_not_offensive
+        'wmd_not_off': extract_wmd_not_offensive,
+        'dis_avg_vec': extract_distance_from_avg_vector
     }
 
 
@@ -137,6 +138,38 @@ def get_distance_df(df, column_name, words_difference, distance_type='euclidean'
     return df_offensive_distance
 
 
+def extract_distance_from_avg_vector(df):
+    df_neg = utils.get_abusive_df(df)
+    df_pos = utils.get_no_abusive_df(df)
+    m_wiki = get_model(r"Embedding/wiki.he.word2vec.model")
+    m_our = get_model(r"Embedding/our.corpus.word2vec.model")
+
+    pos_matrix = np.zeros((df_pos.shape[0], 100))
+    neg_matrix = np.zeros((df_neg.shape[0], 100))
+    for i, post in enumerate(df_pos['text']):
+        embedding_vector = get_post_vector(m_our, m_wiki, post)
+        pos_matrix[i] = embedding_vector
+    for i, post in enumerate(df_neg['text']):
+        embedding_vector = get_post_vector(m_our, m_wiki, post)
+        neg_matrix[i] = embedding_vector
+    neg_avg_vec = np.mean(neg_matrix)
+    pos_avg_vec = np.mean(pos_matrix)
+    distance_type='euclidean'
+    df_offensive_distance = pd.DataFrame(columns=['id', 'dist_avg_neg', 'dist_avg_pos'])
+    df_offensive_distance['id'] = df['id'].tolist()
+    df_offensive_distance['dist_avg_neg'] = df['text'].apply(
+        lambda x:
+        utils.calculate_distance(get_post_vector(m_our, m_wiki, x),
+                                 neg_avg_vec, distance_type)
+    )
+    df_offensive_distance['dist_avg_pos'] = df['text'].apply(
+        lambda x:
+        utils.calculate_distance(get_post_vector(m_our, m_wiki, x),
+                                 pos_avg_vec, distance_type)
+    )
+    return df_offensive_distance
+
+
 def extract_features(df, features):
     functions_dict = get_functions_dictionary()
     features_df = pd.DataFrame(columns=['id'])
@@ -144,3 +177,5 @@ def extract_features(df, features):
     for feature in features:
         features_df = pd.merge(features_df, functions_dict[feature](df), on='id')
     return features_df
+
+
