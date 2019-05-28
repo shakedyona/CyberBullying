@@ -30,6 +30,7 @@ tagged_df = pre.preprocess(tagged_df)
 
 # extract features
 feature_list = ['post_length', 'tfidf', 'topics', 'screamer', 'words', 'off_dis', 'not_off_dis']
+fe.folder_name = folder_name
 X = fe.extract_features(tagged_df, feature_list)
 Logger.write_features(folder_name, feature_list)
 y = (tagged_df['cb_level'] == 3).astype(int)
