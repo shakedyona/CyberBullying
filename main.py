@@ -52,7 +52,6 @@ performances_list['baseline'] = performances_bl
 
 # 2.XGBoost
 xgb_obj = xgb.XGBoost()
-#num_boost_round = xgb_obj.cross_validation()
 xgb_classifier = xgb_obj.train(X_train, y_train)
 y_prob_xgb = xgb_obj.predict(X_test)
 y_pred_xgb = np.where(y_prob_xgb > 0.5, 1, 0)

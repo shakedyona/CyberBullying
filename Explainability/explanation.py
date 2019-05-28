@@ -4,16 +4,7 @@ import xgboost as xgb
 
 
 def explain_model(model, X, folder_name):
-    # Plot Variable Importance
-    xgb.plot_importance(model, importance_type='weight', show_values=True, title='the number of times a feature appears in tree')
-    pl.savefig(folder_name + r'\plot_importance_weight.png')
-    pl.clf()
-    xgb.plot_importance(model, importance_type='gain', show_values=True,
-                        title='The average training loss reduction gained when using a feature for splitting')
-    pl.savefig(folder_name + r'\plot_importance_gain.png')
-    pl.clf()
-
-    # Visualization feature importance with SHAP (global)
+    # Visualization for feature importance with SHAP (global)
     shap.initjs()
     explainer = shap.TreeExplainer(model)
     shap_values = explainer.shap_values(X)
@@ -38,8 +29,16 @@ def explain_model(model, X, folder_name):
     pl.clf()
 
 
-def explain_class(post):
-    pass
-
-
-
+def explain_class(model, post,  X, folder_name):
+    shap.initjs()
+    explainer = shap.TreeExplainer(model)
+    shap_values = explainer.shap_values(X)
+    # visualize the first prediction's explanation
+    shap.force_plot(explainer.expected_value, shap_values[0, :], X.iloc[0, :], matplotlib=True, show=False,
+                    link="logit")
+    pl.savefig(folder_name + r'\force_plot_0.png')
+    pl.clf()
+    shap.force_plot(explainer.expected_value, shap_values[-1, :], X.iloc[-1, :], matplotlib=True, show=False,
+                    link="logit")
+    pl.savefig(folder_name + r'\force_plot_length.png')
+    pl.clf()

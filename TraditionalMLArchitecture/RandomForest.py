@@ -18,7 +18,7 @@ class RandomForest(MLModel):
         return y_pred[:, 1]
 
 
-    def grid_search(self):
+    def grid_search(self, x_train, y_train):
         classifier = RandomForestClassifier(n_estimators=200, max_depth=10, min_samples_split=10)
         grid_param = {
             'max_depth': [5, 10, 80, 90],
@@ -26,7 +26,7 @@ class RandomForest(MLModel):
             'n_estimators': [100, 200, 300, 500, 1000]
         }
         gd_sr = GridSearchCV(estimator=classifier, param_grid=grid_param, scoring='f1', cv=5, verbose=2, n_jobs=-1)
-        gd_sr.fit(self.x_train, self.y_train)
+        gd_sr.fit(x_train, y_train)
         best_parameters = gd_sr.best_params_
         print(best_parameters)
         best_result = gd_sr.best_score_
