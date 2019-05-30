@@ -4,8 +4,9 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 import pandas as pd
 import numpy as np
 from source.FeatureExtraction.LDA import create_LDA_model
-from source import Embedding as wv, utils
-from source.Embedding import get_model, get_post_vector
+from source.Embedding import word2vec as wv
+from source import utils
+from source.Embedding.word2vec import get_model, get_post_vector
 
 folder_name = None
 

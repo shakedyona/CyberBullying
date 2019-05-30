@@ -1,12 +1,17 @@
 import datetime
-from source import Preprocessing as pre, Logger, Baseline as bl, Performances as per, TraditionalMLArchitecture as xgb, \
-    FeatureExtraction as fe, visualization as vis, utils
+from source import Logger
+from source.Preprocessing import preprocessing as pre
+from source import Baseline as bl
+from source.Performances import performances as per
+from source.FeatureExtraction import featureExtraction as fe
+from source import visualization as vis, utils
+import source.TraditionalMLArchitecture.XGBoost as xgb
 import source.TraditionalMLArchitecture.RandomForest as rf
 import source.TraditionalMLArchitecture.NaiveBayes as nb
 from sklearn.model_selection import train_test_split
 import numpy as np
 import os
-from source.Explainability import explain_model
+from source.Explainability.explanation import explain_model
 from sklearn.metrics import accuracy_score
 
 # logger
