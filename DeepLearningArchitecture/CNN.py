@@ -14,6 +14,7 @@ class CNN(DLModel):
         model.add(self.word2vec_embedding_layer())
         model.add(layers.Conv1D(num_filters, kernel_size, activation='relu'))
         model.add(layers.GlobalMaxPooling1D())
+        model.add(layers.Dropout(0.50))
         model.add(layers.Dense(20, activation='relu'))
         model.add(layers.Dense(1, activation='sigmoid'))
         model.compile(optimizer='adam',
