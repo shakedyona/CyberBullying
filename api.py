@@ -51,8 +51,3 @@ def get_performances(file_path):
     X = X.drop(columns=['id'])
     y_prob_rf = rf_obj.predict(X)
     pred = np.where(y_prob_rf > 0.5, 1, 0)
-
-
-
-
-
