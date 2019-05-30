@@ -5,6 +5,7 @@ from sklearn.externals import joblib
 from source import TraditionalMLArchitecture as xgb
 import source.TraditionalMLArchitecture.RandomForest as rf
 import source.TraditionalMLArchitecture.NaiveBayes as nb
+import pathlib
 
 
 def get_abusive_df(df):
@@ -141,7 +142,10 @@ def save_model(model, path='outputs/model.pkl'):
 
 
 def get_model(path='outputs/model.pkl'):
-    return joblib.load(path)
+    path_object = pathlib.Path(path)
+    if path_object.exists():
+        return joblib.load(path)
+    return None
 
 
 def create_list_of_models():

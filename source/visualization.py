@@ -40,6 +40,13 @@ def create_word_cloud(no_topics, lda, feature_names, folder_name):
         plt.show()
 
 
+def create_lda_visualization(no_topics, lda_model):
+    tf_vectorizer = utils.get_model(os.path.join('outputs', 'tf.pkl'))
+    tf_feature_names = tf_vectorizer.get_feature_names()
+
+    create_word_cloud(no_topics, lda_model, tf_feature_names)  # TODO: folder_name
+
+
 def print_tf_idf_dict(tf_idf_dict):
     for key, value in tf_idf_dict.items():
         print('post: ')
