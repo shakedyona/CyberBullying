@@ -1,5 +1,5 @@
-from .. import base_handler
-from ... import api
+import base_handler
+from source import api
 import json
 
 
@@ -12,7 +12,7 @@ class Predict(base_handler.BaseHandler):
 
         if data:
             self.set_status(200)
-            self.write(json.dumps(data))
+            self.write(data)
         else:
             self.set_status(500)
 

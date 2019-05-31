@@ -10,12 +10,14 @@ import shutil
 import os
 import pathlib
 
+HERE = pathlib.Path(__file__).parent
+
 
 def train_file(file_path):
-    path_object = pathlib.Path('source/outputs')
+    path_object = pathlib.Path(HERE / 'outputs')
     if path_object.exists():
-        shutil.rmtree('source/outputs')
-        os.makedirs('source/outputs')
+        shutil.rmtree(HERE / 'outputs')
+        os.makedirs(HERE / 'outputs')
     tagged_df = utils.read_to_df(file_path)
     tagged_df = pre.preprocess(tagged_df)
     feature_list = ['post_length', 'tfidf', 'topics', 'screamer', 'words', 'off_dis', 'not_off_dis']
@@ -25,14 +27,14 @@ def train_file(file_path):
     rf_obj = rf.RandomForest()
     rf_obj.train(X, y)
     exp.explain_model(rf_obj.model, X)
-    utils.save_model(rf_obj.model, os.path.join('source/outputs', 'RandomForest.pkl'))
+    utils.save_model(rf_obj.model, os.path.join(HERE / 'outputs', 'RandomForest.pkl'))
 
 
 def predict(post, explainability=True):
-    if len(os.listdir('source/outputs') ) == 0:
+    if len(os.listdir(HERE / 'outputs')) == 0:
         return {'error': "Please train the model with train data set first.."}
 
-    model = utils.get_model(os.path.join('source/outputs', 'RandomForest.pkl'))
+    model = utils.get_model(os.path.join(HERE / 'outputs', 'RandomForest.pkl'))
     rf_obj = rf.RandomForest()
     rf_obj.model = model
     post_dataframe = pd.DataFrame({'id': [1], 'text': [post]})
@@ -42,14 +44,14 @@ def predict(post, explainability=True):
     X = X.drop(columns=['id'])
     y_prob_rf = rf_obj.predict(X)
     pred = np.where(y_prob_rf > 0.5, 1, 0)
-    result = {'class': pred[0]}
+    result = {'class': int(pred[0])}
     if explainability:
         result['explain'] = exp.explain_class(model, X)
     return result
 
 
 def get_performances(file_path):
-    model = utils.get_model('source/outputs/RandomForest.pkl')
+    model = utils.get_model(HERE / 'outputs/RandomForest.pkl')
     rf_obj = rf.RandomForest()
     rf_obj.model = model
     df = utils.read_to_df(file_path)

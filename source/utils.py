@@ -7,6 +7,7 @@ import source.TraditionalMLArchitecture.RandomForest as rf
 import source.TraditionalMLArchitecture.NaiveBayes as nb
 import pathlib
 import matplotlib.pyplot as plt
+SOURCE = pathlib.Path(__file__).parent
 
 
 def get_abusive_df(df):
@@ -65,7 +66,7 @@ def get_stop_words():
     gets list of stop words from a file
     :return:
     """
-    stop_words = file_to_list(r'source/stop_words.txt')
+    stop_words = file_to_list(SOURCE / 'stop_words.txt')
     return stop_words
 
 

@@ -1,13 +1,12 @@
-from .. import base_handler
-from ... import api
+import base_handler
+from source import api
 import json
 
 
 class Performances(base_handler.BaseHandler):
     def post(self):
-
-        performances = api.get_performances()
-
+        file = self.body_argument('file')
+        performances = api.get_performances(file)
         if performances:
             self.set_status(200)
             self.write(json.dumps(performances))
