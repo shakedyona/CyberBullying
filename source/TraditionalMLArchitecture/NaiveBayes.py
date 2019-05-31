@@ -1,4 +1,4 @@
-from TraditionalMLArchitecture.MLModel import MLModel
+from source.TraditionalMLArchitecture.MLModel import MLModel
 from sklearn.naive_bayes import GaussianNB
 
 

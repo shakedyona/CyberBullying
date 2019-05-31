@@ -1,6 +1,6 @@
 from keras.models import Sequential
 from keras import layers
-from DeepLearningArchitecture.DLModel import DLModel
+from source.DeepLearningArchitecture.DLModel import DLModel
 
 
 class lstm(DLModel):

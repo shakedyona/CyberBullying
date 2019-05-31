@@ -2,9 +2,11 @@ import pandas as pd
 from nltk.tokenize import word_tokenize
 from scipy.spatial import distance
 from sklearn.externals import joblib
-import TraditionalMLArchitecture.XGBoost as xgb
-import TraditionalMLArchitecture.RandomForest as rf
-import TraditionalMLArchitecture.NaiveBayes as nb
+from source import TraditionalMLArchitecture as xgb
+import source.TraditionalMLArchitecture.RandomForest as rf
+import source.TraditionalMLArchitecture.NaiveBayes as nb
+import pathlib
+import matplotlib.pyplot as plt
 
 
 def get_abusive_df(df):
@@ -141,8 +143,16 @@ def save_model(model, path='outputs/model.pkl'):
 
 
 def get_model(path='outputs/model.pkl'):
-    return joblib.load(path)
+    path_object = pathlib.Path(path)
+    if path_object.exists():
+        return joblib.load(path)
+    return None
 
 
 def create_list_of_models():
     return [('NB', nb.NaiveBayes().model), ('RF', rf.RandomForest().model), ('XGB', xgb.XGBoost().model)]
+
+
+def save_picture(path):
+    plt.savefig(path)
+    plt.clf()

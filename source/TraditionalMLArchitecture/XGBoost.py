@@ -1,6 +1,6 @@
 from sklearn.model_selection import GridSearchCV
 
-from TraditionalMLArchitecture.MLModel import MLModel
+from source.TraditionalMLArchitecture.MLModel import MLModel
 import xgboost as xgb
 
 

@@ -1,25 +1,21 @@
 import datetime
-import Logger
-import utils
-import Preprocessing.preprocessing as pre
-import FeatureExtraction.featureExtraction as fe
-import TraditionalMLArchitecture.XGBoost as xgb
-import TraditionalMLArchitecture.RandomForest as rf
-import TraditionalMLArchitecture.NaiveBayes as nb
+from source import Logger
+from source.Preprocessing import preprocessing as pre
+from source import Baseline as bl
+from source.Performances import performances as per
+from source.FeatureExtraction import featureExtraction as fe
+from source import visualization as vis, utils
+import source.TraditionalMLArchitecture.XGBoost as xgb
+import source.TraditionalMLArchitecture.RandomForest as rf
+import source.TraditionalMLArchitecture.NaiveBayes as nb
 from sklearn.model_selection import train_test_split
-import Performances.performances as per
-import visualization as vis
 import numpy as np
-import Baseline as bl
 import os
-from Explainability.explanation import explain_model
+from source.Explainability.explanation import explain_model
 from sklearn.metrics import accuracy_score
 
 # logger
-datetime_object = datetime.datetime.now()
-folder_name = r"Looger\Logger_"+str(datetime_object).replace(':','-')
-if not os.path.exists(folder_name):
-    os.makedirs(folder_name)
+logger = Logger.get_logger_instance()
 
 # get tagged df
 tagged_df = utils.read_to_df()  # Vigo data
@@ -30,9 +26,9 @@ tagged_df = pre.preprocess(tagged_df)
 
 # extract features
 feature_list = ['post_length', 'tfidf', 'topics', 'screamer', 'words', 'off_dis', 'not_off_dis']
-fe.folder_name = folder_name
+fe.folder_name = logger.folder_name
 X = fe.extract_features(tagged_df, feature_list)
-Logger.write_features(folder_name, feature_list)
+logger.write_features(feature_list)
 y = (tagged_df['cb_level'] == 3).astype(int)
 X = X.drop(columns=['id'])
 
@@ -92,8 +88,8 @@ vis.plot_models_compare(performances_bl, performances_xgb, performances_rf, perf
 
 # SHAP for XGBoost:
 # explain_model(xgbObj.get_booster(), X_shap, folder_name)
-explain_model(xgb_obj.get_booster(), X_test, folder_name)
-Logger.write_performances(folder_name,auc_list,performances_list,datetime_object)
+explain_model(xgb_obj.get_booster(), X_test, logger.folder_name)
+logger.write_performances(auc_list, performances_list)
 
 acc_bl = accuracy_score(y, y_pred_bl)
 acc_xgb = accuracy_score(y_test, y_pred_xgb)

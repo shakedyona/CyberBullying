@@ -3,9 +3,9 @@ from sklearn.metrics import precision_score
 from sklearn.metrics import recall_score
 import numpy as np
 from sklearn.model_selection import cross_validate
-import utils
 from sklearn.metrics import precision_recall_curve
 import matplotlib.pyplot as plt
+from source import utils
 
 
 def get_performances(true, pred):

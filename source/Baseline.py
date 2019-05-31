@@ -1,7 +1,6 @@
-import Preprocessing.preprocessing as pre
+from source.Preprocessing import preprocessing as pre
+from  source import utils
 import pandas as pd
-import utils
-import Performances.performances as per
 
 
 def run_baseline(tagged_df):

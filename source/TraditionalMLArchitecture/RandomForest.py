@@ -1,5 +1,5 @@
 from sklearn.model_selection import GridSearchCV
-from TraditionalMLArchitecture.MLModel import MLModel
+from source.TraditionalMLArchitecture.MLModel import MLModel
 from sklearn.ensemble import RandomForestClassifier
 
 
