@@ -78,8 +78,8 @@ def extract_post_length(df):
 
 
 def extract_topics(df):
-    dt_matrix = create_LDA_model(df, 4, '',folder_name)
-    features = pd.DataFrame(dt_matrix, columns=['T1', 'T2', 'T3', 'T4'])
+    dt_matrix = create_LDA_model(df, 3, '',folder_name)
+    features = pd.DataFrame(dt_matrix, columns=['T1', 'T2', 'T3'])
     features['id'] = df['id'].tolist()
     return features
 
