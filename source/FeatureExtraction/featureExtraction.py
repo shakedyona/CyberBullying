@@ -7,7 +7,6 @@ from source import utils
 from source.Embedding import word2vec as w2v
 import os.path
 from . import helpers
-folder_name = None
 
 
 def get_functions_dictionary():
