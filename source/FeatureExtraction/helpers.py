@@ -1,3 +1,5 @@
+import pathlib
+
 from source import utils
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -30,6 +32,10 @@ def reduce_damnation(mat):
 
 
 def get_meaningful_words_tf_idf_difference(df):
+    path = 'source/outputs/MeaningfulWords.pkl'
+    path_object = pathlib.Path(path)
+    if path_object.exists():
+        return pd.read_pickle(path)
     df_neg = utils.get_abusive_df(df)
     df_pos = utils.get_no_abusive_df(df)
     posts = [' '.join(df_neg['text'].tolist()), ' '.join(df_pos['text'].tolist())]
@@ -43,7 +49,9 @@ def get_meaningful_words_tf_idf_difference(df):
     x = tfidf.transform(posts)
     x = x[0, :] - x[1, :]
     df_tf_idf = pd.DataFrame(x.toarray(), columns=tfidf.get_feature_names())
-    return df_tf_idf.sort_values(by=0, axis=1, ascending=False)
+    df_tf_idf = df_tf_idf.sort_values(by=0, axis=1, ascending=False)
+    df_tf_idf.to_pickle(path)
+    return df_tf_idf
 
 
 def get_distance_df(df, column_name, sentence, distance_type='euclidean'):

@@ -4,10 +4,11 @@ from source import utils
 import datetime
 _logger = None
 
+
 class Logger:
     def __init__(self):
         self.datetime_object = datetime.datetime.now()
-        self.folder_name = os.path.join("Logger", "Logger_", str(self.datetime_object).replace(':', '-'))
+        self.folder_name = os.path.join("source/logger_dir", "Logger_" + str(self.datetime_object).replace(':', '-'))
         if not os.path.exists(self.folder_name):
             os.makedirs(self.folder_name)
 

@@ -24,23 +24,27 @@ def train_file(file_path):
     X = X.drop(columns=['id'])
     rf_obj = rf.RandomForest()
     rf_obj.train(X, y)
+    exp.explain_model(rf_obj.model, X)
     utils.save_model(rf_obj.model, os.path.join('source/outputs', 'RandomForest.pkl'))
 
 
 def predict(post, explainability=True):
+    if len(os.listdir('source/outputs') ) == 0:
+        return {'error': "Please train the model with train data set first.."}
+
     model = utils.get_model(os.path.join('source/outputs', 'RandomForest.pkl'))
     rf_obj = rf.RandomForest()
     rf_obj.model = model
-    tagged_df = pd.DataFrame({'id': [1], 'text': [post]})
-    tagged_df = pre.preprocess(tagged_df)
+    post_dataframe = pd.DataFrame({'id': [1], 'text': [post]})
+    post_dataframe = pre.preprocess(post_dataframe)
     feature_list = ['post_length', 'tfidf', 'topics', 'screamer', 'words', 'off_dis', 'not_off_dis']
-    X = fe.extract_features(tagged_df, feature_list)
+    X = fe.extract_features(post_dataframe, feature_list)
     X = X.drop(columns=['id'])
     y_prob_rf = rf_obj.predict(X)
     pred = np.where(y_prob_rf > 0.5, 1, 0)
-    result = {'class': pred}
+    result = {'class': pred[0]}
     if explainability:
-        result['explain'] = exp.explain_class(post)
+        result['explain'] = exp.explain_class(model, X)
     return result
 
 
