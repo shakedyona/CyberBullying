@@ -159,5 +159,3 @@ def extract_features(df, features):
     for feature in features:
         features_df = pd.merge(features_df, functions_dict[feature](df), on='id')
     return features_df
-
-
