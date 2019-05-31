@@ -15,7 +15,7 @@ from source.Explainability.explanation import explain_model
 from sklearn.metrics import accuracy_score
 
 # logger
-logger = Logger.Logger()
+logger = Logger.get_logger_instance()
 
 # get tagged df
 tagged_df = utils.read_to_df()  # Vigo data

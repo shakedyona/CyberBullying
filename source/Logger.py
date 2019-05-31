@@ -2,7 +2,7 @@ import pandas as pd
 import os.path
 from source import utils
 import datetime
-
+_logger = None
 
 class Logger:
     def __init__(self):
@@ -28,3 +28,10 @@ class Logger:
 
     def save_picture(self, picture_name):
         utils.save_picture(os.path.join(self.folder_name, picture_name))
+
+
+def get_logger_instance():
+    global _logger
+    if _logger is None:
+        _logger = Logger()
+    return _logger

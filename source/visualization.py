@@ -5,7 +5,7 @@ import pandas as pd
 import xgboost as xgb
 import wordcloud
 import numpy as np
-
+from source import Logger
 
 def plot_tf_idf_post(dictionary_tf_idf, title):
     dic_post = dict(dictionary_tf_idf[title])
@@ -27,13 +27,14 @@ def plot_length_posts(dictionary_length, title):
     plt.show()
 
 
-def create_word_cloud(no_topics, lda, feature_names, folder_name):
+def create_word_cloud(no_topics, lda, feature_names):
+    logger = Logger.get_logger_instance()
     font_path = os.path.join(os.path.join(os.environ['WINDIR'], 'Fonts'), 'ahronbd.ttf')
     for i in range(0, no_topics):
         d = dict(zip(utils.traverse(feature_names), lda.components_[i]))
         wc = wordcloud.WordCloud(background_color='white', font_path=font_path, max_words=50, stopwords=utils.get_stop_words())
         image = wc.generate_from_frequencies(d)
-        image.to_file(folder_name + r'\Topic' + str(i+1) + '.png')
+        image.to_file(logger.folder_name + r'\Topic' + str(i+1) + '.png')
         plt.figure()
         plt.imshow(wc, interpolation='bilinear')
         plt.axis("off")
