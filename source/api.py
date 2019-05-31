@@ -1,10 +1,18 @@
-from source import Preprocessing as pre, FeatureExtraction as fe, utils
+from source.Preprocessing import preprocessing as pre
+from source.FeatureExtraction import featureExtraction as fe
+from source.Performances import performances as per
+from source import utils
+from source.Explainability import explanation as exp
 import source.TraditionalMLArchitecture.RandomForest as rf
 import numpy as np
 import pandas as pd
+import shutil
+import os
 
 
 def train_file(file_path):
+    shutil.rmtree('outputs')
+    os.makedirs('outputs')
     tagged_df = utils.read_to_df(file_path)
     tagged_df = pre.preprocess(tagged_df)
     feature_list = ['post_length', 'tfidf', 'topics', 'screamer', 'words', 'off_dis', 'not_off_dis']
@@ -13,11 +21,11 @@ def train_file(file_path):
     X = X.drop(columns=['id'])
     rf_obj = rf.RandomForest()
     rf_obj.train(X, y)
-    utils.save_model(rf_obj.model)
+    utils.save_model(rf_obj.model, os.path.join('outputs', 'RandomForest.pkl'))
 
 
 def predict(post, explainability=True):
-    model = utils.get_model()
+    model = utils.get_model(os.path.join('outputs', 'RandomForest.pkl'))
     rf_obj = rf.RandomForest()
     rf_obj.model = model
     tagged_df = pd.DataFrame({'id': [1], 'text': [post]})
@@ -29,7 +37,7 @@ def predict(post, explainability=True):
     pred = np.where(y_prob_rf > 0.5, 1, 0)
     result = {'class': pred}
     if explainability:
-        result['explain'] = explain_class(post)
+        result['explain'] = exp.explain_class(post)
     return result
 
 
@@ -37,10 +45,12 @@ def get_performances(file_path):
     model = utils.get_model()
     rf_obj = rf.RandomForest()
     rf_obj.model = model
-    tagged_df = utils.read_to_df(file_path)
-    tagged_df = pre.preprocess(tagged_df)
+    df = utils.read_to_df(file_path)
+    df = pre.preprocess(df)
     feature_list = ['post_length', 'tfidf', 'topics', 'screamer', 'words', 'off_dis', 'not_off_dis']
-    X = fe.extract_features(tagged_df, feature_list)
+    X = fe.extract_features(df, feature_list)
     X = X.drop(columns=['id'])
+    y = (df['cb_level'] == 3).astype(int)
     y_prob_rf = rf_obj.predict(X)
     pred = np.where(y_prob_rf > 0.5, 1, 0)
+    return per.get_performances(y, pred)
