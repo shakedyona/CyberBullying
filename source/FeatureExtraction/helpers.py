@@ -9,7 +9,7 @@ from source.Embedding import word2vec as w2v
 
 
 def get_tf_vectorizer_data(posts):
-    tf_vectorizer = utils.get_model(os.path.join("outputs", "tf.pkl"))
+    tf_vectorizer = utils.get_model(os.path.join("source/outputs", "tf.pkl"))
     if tf_vectorizer is None:
         tf_vectorizer = CountVectorizer(max_df=0.6, min_df=0.01, stop_words=utils.get_stop_words())
         tf_vectorizer.fit(posts)

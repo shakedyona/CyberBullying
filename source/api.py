@@ -45,7 +45,7 @@ def predict(post, explainability=True):
 
 
 def get_performances(file_path):
-    model = utils.get_model()
+    model = utils.get_model('source/outputs/RandomForest.pkl')
     rf_obj = rf.RandomForest()
     rf_obj.model = model
     df = utils.read_to_df(file_path)
