@@ -6,6 +6,7 @@ from source import TraditionalMLArchitecture as xgb
 import source.TraditionalMLArchitecture.RandomForest as rf
 import source.TraditionalMLArchitecture.NaiveBayes as nb
 import pathlib
+import matplotlib.pyplot as plt
 
 
 def get_abusive_df(df):
@@ -150,3 +151,8 @@ def get_model(path='outputs/model.pkl'):
 
 def create_list_of_models():
     return [('NB', nb.NaiveBayes().model), ('RF', rf.RandomForest().model), ('XGB', xgb.XGBoost().model)]
+
+
+def save_picture(path):
+    plt.savefig(path)
+    plt.clf()
