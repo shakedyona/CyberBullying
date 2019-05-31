@@ -57,11 +57,11 @@ def extract_wmd_not_offensive(df):
 def extract_tf_idf(df):
     posts = df['text'].tolist()
 
-    tf_idf_model = utils.get_model(os.path.join("outputs", "tfidf.pkl"))
-    if tf_idf_model in None:
+    tf_idf_model = utils.get_model(os.path.join("source/outputs", "tfidf.pkl"))
+    if tf_idf_model is None:
         tf_idf_model = TfidfVectorizer(stop_words=utils.get_stop_words(), ngram_range=(1, 2))
         tf_idf_model.fit(posts)
-        utils.save_model(tf_idf_model, os.path.join('outputs', 'tfidf.pkl'))
+        utils.save_model(tf_idf_model, os.path.join('source/outputs', 'tfidf.pkl'))
 
     tf_idf_matrix = tf_idf_model.transform(posts)
 
@@ -81,12 +81,12 @@ def extract_post_length(df):
 def extract_topics(df):
     posts = df['text'].values
     tf_transform = helpers.get_tf_vectorizer_data(posts)
-    lda = utils.get_model(os.path.join("outputs", "lda.pkl"))
+    lda = utils.get_model(os.path.join("source/outputs", "lda.pkl"))
     if lda is None:
         lda = LatentDirichletAllocation(n_topics=4, max_iter=5, learning_method='online', learning_offset=50.,
                                         random_state=0)
         lda.fit(tf_transform)
-        utils.save_model(lda, os.path.join("outputs", "lda.pkl"))
+        utils.save_model(lda, os.path.join("source/outputs", "lda.pkl"))
 
     dt_matrix = lda.transform(tf_transform)
     features = pd.DataFrame(dt_matrix, columns=['T1', 'T2', 'T3', 'T4'])

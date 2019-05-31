@@ -8,11 +8,14 @@ import numpy as np
 import pandas as pd
 import shutil
 import os
+import pathlib
 
 
 def train_file(file_path):
-    shutil.rmtree('outputs')
-    os.makedirs('outputs')
+    path_object = pathlib.Path('source/outputs')
+    if path_object.exists():
+        shutil.rmtree('source/outputs')
+        os.makedirs('source/outputs')
     tagged_df = utils.read_to_df(file_path)
     tagged_df = pre.preprocess(tagged_df)
     feature_list = ['post_length', 'tfidf', 'topics', 'screamer', 'words', 'off_dis', 'not_off_dis']
@@ -21,11 +24,11 @@ def train_file(file_path):
     X = X.drop(columns=['id'])
     rf_obj = rf.RandomForest()
     rf_obj.train(X, y)
-    utils.save_model(rf_obj.model, os.path.join('outputs', 'RandomForest.pkl'))
+    utils.save_model(rf_obj.model, os.path.join('source/outputs', 'RandomForest.pkl'))
 
 
 def predict(post, explainability=True):
-    model = utils.get_model(os.path.join('outputs', 'RandomForest.pkl'))
+    model = utils.get_model(os.path.join('source/outputs', 'RandomForest.pkl'))
     rf_obj = rf.RandomForest()
     rf_obj.model = model
     tagged_df = pd.DataFrame({'id': [1], 'text': [post]})
