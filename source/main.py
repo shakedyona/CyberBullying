@@ -28,7 +28,7 @@ tagged_df = pre.preprocess(tagged_df)
 feature_list = ['post_length', 'tfidf', 'topics', 'screamer', 'words', 'off_dis', 'not_off_dis']
 fe.folder_name = logger.folder_name
 X = fe.extract_features(tagged_df, feature_list)
-Logger.write_features(logger.folder_name, feature_list)
+logger.write_features(feature_list)
 y = (tagged_df['cb_level'] == 3).astype(int)
 X = X.drop(columns=['id'])
 
@@ -89,7 +89,7 @@ vis.plot_models_compare(performances_bl, performances_xgb, performances_rf, perf
 # SHAP for XGBoost:
 # explain_model(xgbObj.get_booster(), X_shap, folder_name)
 explain_model(xgb_obj.get_booster(), X_test, logger.folder_name)
-Logger.write_performances(logger.folder_name, auc_list, performances_list)
+logger.write_performances(auc_list, performances_list)
 
 acc_bl = accuracy_score(y, y_pred_bl)
 acc_xgb = accuracy_score(y_test, y_pred_xgb)
