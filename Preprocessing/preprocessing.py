@@ -8,13 +8,14 @@ def preprocess(df):
     :param df: dataframe
     :return clean_df: dataframe
     """
-    df.drop_duplicates(subset='id', inplace=True)
+    #df.drop_duplicates(subset='id', inplace=True)
     df.dropna(inplace=True)
     df['text'] = df['text'].apply(
         lambda x:
         re.sub(r'[^א-ת!]+', ' ', x)
     )
     df.reset_index(drop=True, inplace=True)
+    df['id'] = list(range(df.shape[0]))
     return df
 
 

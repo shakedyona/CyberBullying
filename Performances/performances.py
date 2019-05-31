@@ -4,6 +4,8 @@ from sklearn.metrics import recall_score
 import numpy as np
 from sklearn.model_selection import cross_validate
 import utils
+from sklearn.metrics import precision_recall_curve
+import matplotlib.pyplot as plt
 
 
 def get_performances(true, pred):
@@ -31,6 +33,15 @@ def get_roc_auc(y, y_pred):
     roc_auc = auc(fpr, tpr)
     return roc_auc, fpr, tpr
 
+def precision_recall(y, y_pred):
+    p, r, _ = precision_recall_curve(y, y_pred)
+    plt.step(r, p, color='b', alpha=0.2, where='post')
+    plt.xlabel('Recall')
+    plt.ylabel('Precision')
+    plt.ylim([0.0, 1.05])
+    plt.xlim([0.0, 1.0])
+    plt.title('2-class Precision-Recall curve')
+    plt.legend(loc="lower right")
 
 def evaluate(X, y):
     models = utils.create_list_of_models()
