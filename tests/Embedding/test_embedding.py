@@ -9,7 +9,7 @@ def test_correct_embedding():
     post = 'אני אוהבת אותו כל כך'
     post_vector = w2v.get_post_vector(m_our, m_wiki, post)
     print(post_vector.shape)
-    assert post_vector.shape == (1, 100)
+    assert post_vector.shape == (100,)
 
 
 test_correct_embedding()

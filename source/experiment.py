@@ -37,7 +37,7 @@ X = X.drop(columns=['id'])
 # X_shap = X.iloc[index_not_offensive: index_offensive + 1]
 
 # split data to train and test
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
 
 performances_list = {}
 auc_list = {}
