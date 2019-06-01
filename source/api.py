@@ -11,7 +11,7 @@ import os
 import pathlib
 
 HERE = pathlib.Path(__file__).parent
-FEATURE_LIST = ['post_length', 'tfidf', 'topics', 'screamer', 'words', 'off_dis', 'not_off_dis']
+FEATURE_LIST = ['post_length', 'tfidf', 'topics', 'screamer', 'words', 'off_dis', 'not_off_dis', 'dis_avg_vec']
 
 
 def train_file(file_path):
