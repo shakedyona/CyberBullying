@@ -1,6 +1,9 @@
 import base_handler
 from source import api
-import json
+import os.path
+from source import utils
+
+SOURCE = os.path.abspath(os.path.join(__file__, '../../../'))
 
 
 class Predict(base_handler.BaseHandler):
@@ -9,10 +12,13 @@ class Predict(base_handler.BaseHandler):
         explain = self.body_argument('explainability')
 
         data = api.predict(post, explain)
-
-        if data:
-            self.set_status(200)
+        if 'error' in data.keys():
+            self.set_status(404)
             self.write(data)
-        else:
-            self.set_status(500)
+            return
+
+        data['explain'] = utils.get_image_string(os.path.join(SOURCE, 'outputs/force_plot_post.png'))
+        self.set_status(200)
+        self.write(data)
+
 
