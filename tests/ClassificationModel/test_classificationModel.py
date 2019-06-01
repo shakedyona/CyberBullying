@@ -1,5 +1,8 @@
 import os
 import pathlib
+
+import numpy
+
 from source.Preprocessing import preprocessing as pre
 import pandas as pd
 import source.FeatureExtraction.featureExtraction as fe
@@ -20,7 +23,9 @@ def test_correct_classification():
     X = X.drop(columns=['id'])
     y_prob_rf = rf_obj.predict(X)
     my_prob = y_prob_rf[0]
-    assert type(my_prob) is float and my_prob is not None
+    if my_prob is None:
+        assert False
+    assert isinstance(my_prob, numpy.float64)
 
 
 test_correct_classification()
