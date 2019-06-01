@@ -7,6 +7,7 @@ import source.TraditionalMLArchitecture.RandomForest as rf
 import source.TraditionalMLArchitecture.NaiveBayes as nb
 import pathlib
 import matplotlib.pyplot as plt
+import base64
 SOURCE = pathlib.Path(__file__).parent
 
 
@@ -156,4 +157,13 @@ def create_list_of_models():
 
 def save_picture(path):
     plt.savefig(path)
+
+
+def clear_plot():
     plt.clf()
+
+
+def get_image_string(path):
+    with open(path, mode='rb') as file:
+        img = file.read()
+    return base64.encodebytes(img).decode("utf-8")

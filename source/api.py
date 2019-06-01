@@ -11,6 +11,7 @@ import os
 import pathlib
 
 HERE = pathlib.Path(__file__).parent
+FEATURE_LIST = ['post_length', 'tfidf', 'topics', 'screamer', 'words', 'off_dis', 'not_off_dis']
 
 
 def train_file(file_path):
@@ -20,8 +21,7 @@ def train_file(file_path):
         os.makedirs(HERE / 'outputs')
     tagged_df = utils.read_to_df(file_path)
     tagged_df = pre.preprocess(tagged_df)
-    feature_list = ['post_length', 'tfidf', 'topics', 'screamer', 'words', 'off_dis', 'not_off_dis']
-    X = fe.extract_features(tagged_df, feature_list)
+    X = fe.extract_features(tagged_df, FEATURE_LIST)
     y = (tagged_df['cb_level'] == 3).astype(int)
     X = X.drop(columns=['id'])
     rf_obj = rf.RandomForest()
@@ -39,8 +39,7 @@ def predict(post, explainability=True):
     rf_obj.model = model
     post_dataframe = pd.DataFrame({'id': [1], 'text': [post]})
     post_dataframe = pre.preprocess(post_dataframe)
-    feature_list = ['post_length', 'tfidf', 'topics', 'screamer', 'words', 'off_dis', 'not_off_dis']
-    X = fe.extract_features(post_dataframe, feature_list)
+    X = fe.extract_features(post_dataframe, FEATURE_LIST)
     X = X.drop(columns=['id'])
     y_prob_rf = rf_obj.predict(X)
     pred = np.where(y_prob_rf > 0.5, 1, 0)
@@ -56,8 +55,7 @@ def get_performances(file_path):
     rf_obj.model = model
     df = utils.read_to_df(file_path)
     df = pre.preprocess(df)
-    feature_list = ['post_length', 'tfidf', 'topics', 'screamer', 'words', 'off_dis', 'not_off_dis']
-    X = fe.extract_features(df, feature_list)
+    X = fe.extract_features(df, FEATURE_LIST)
     X = X.drop(columns=['id'])
     y = (df['cb_level'] == 3).astype(int)
     y_prob_rf = rf_obj.predict(X)
