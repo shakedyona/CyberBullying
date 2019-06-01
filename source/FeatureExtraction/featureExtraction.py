@@ -85,13 +85,13 @@ def extract_topics(df):
     tf_transform = helpers.get_tf_vectorizer_data(posts)
     lda = utils.get_model(os.path.join(SOURCE / "outputs", "lda.pkl"))
     if lda is None:
-        lda = LatentDirichletAllocation(n_topics=4, max_iter=5, learning_method='online', learning_offset=50.,
+        lda = LatentDirichletAllocation(n_topics=3, max_iter=5, learning_method='online', learning_offset=50.,
                                         random_state=0)
         lda.fit(tf_transform)
         utils.save_model(lda, os.path.join(SOURCE / "outputs", "lda.pkl"))
 
     dt_matrix = lda.transform(tf_transform)
-    features = pd.DataFrame(dt_matrix, columns=['T1', 'T2', 'T3', 'T4'])
+    features = pd.DataFrame(dt_matrix, columns=['T1', 'T2', 'T3'])
     features['id'] = df['id'].tolist()
     return features
 
