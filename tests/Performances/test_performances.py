@@ -13,7 +13,7 @@ def test_correct_performance():
     # model = utils.get_model(os.path.join('outputs', 'RandomForest.pkl'))
     # rf_obj = rf.RandomForest()
     # rf_obj.model = model
-    # 
+    #
     # df = utils.read_to_df(file_path)
     # df = pre.preprocess(df)
     # feature_list = ['post_length', 'tfidf', 'topics', 'screamer', 'words', 'off_dis', 'not_off_dis']
