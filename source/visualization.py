@@ -6,6 +6,9 @@ import xgboost as xgb
 import wordcloud
 import numpy as np
 from source import Logger
+import pathlib
+WHERE_OUTPUTS = pathlib.Path(__file__).parent
+
 
 def plot_tf_idf_post(dictionary_tf_idf, title):
     dic_post = dict(dictionary_tf_idf[title])
@@ -42,10 +45,10 @@ def create_word_cloud(no_topics, lda, feature_names):
 
 
 def create_lda_visualization(no_topics, lda_model):
-    tf_vectorizer = utils.get_model(os.path.join('outputs', 'tf.pkl'))
+    tf_vectorizer = utils.get_model(os.path.join(WHERE_OUTPUTS / 'outputs', 'tf.pkl'))
     tf_feature_names = tf_vectorizer.get_feature_names()
 
-    create_word_cloud(no_topics, lda_model, tf_feature_names)  # TODO: folder_name
+    create_word_cloud(no_topics, lda_model, tf_feature_names)
 
 
 def print_tf_idf_dict(tf_idf_dict):

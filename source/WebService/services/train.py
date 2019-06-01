@@ -1,13 +1,10 @@
-from .. import base_handler
-from ... import api
+import base_handler
+from source import api
 
 
 class Train(base_handler.BaseHandler):
     def post(self):
         file = self.body_argument('file')
-        succeed = api.train_file(file)
-        if succeed:
-            self.set_status(200)
-        else:
-            self.set_status(500)
+        api.train_file(file)
+        self.set_status(200)
 

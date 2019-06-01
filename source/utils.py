@@ -2,11 +2,12 @@ import pandas as pd
 from nltk.tokenize import word_tokenize
 from scipy.spatial import distance
 from sklearn.externals import joblib
-from source import TraditionalMLArchitecture as xgb
+from source.TraditionalMLArchitecture import XGBoost as xgb
 import source.TraditionalMLArchitecture.RandomForest as rf
 import source.TraditionalMLArchitecture.NaiveBayes as nb
 import pathlib
 import matplotlib.pyplot as plt
+SOURCE = pathlib.Path(__file__).parent
 
 
 def get_abusive_df(df):
@@ -65,7 +66,7 @@ def get_stop_words():
     gets list of stop words from a file
     :return:
     """
-    stop_words = file_to_list(r'stop_words.txt')
+    stop_words = file_to_list(SOURCE / 'stop_words.txt')
     return stop_words
 
 
