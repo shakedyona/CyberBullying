@@ -9,7 +9,7 @@ SOURCE = os.path.abspath(os.path.join(__file__, '../../../'))
 class Performances(base_handler.BaseHandler):
     def post(self):
         file = self.body_argument('file')
-        performances = api.get_performances(file)
+        performances = api.get_performance(file)
         images = [utils.get_image_string(os.path.join(SOURCE, 'outputs/summary_plot_bar.png')),
                   utils.get_image_string(os.path.join(SOURCE, 'outputs/dependence_plot.png')),
                   utils.get_image_string(os.path.join(SOURCE, 'outputs/summary_plot.png'))]

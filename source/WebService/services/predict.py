@@ -11,7 +11,7 @@ class Predict(base_handler.BaseHandler):
         post = self.body_argument('post')
         explain = self.body_argument('explainability')
 
-        data = api.predict(post, explain)
+        data = api.get_classification(post, explain)
         if 'error' in data.keys():
             self.set_status(404)
             self.write(data)
