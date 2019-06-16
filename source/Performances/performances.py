@@ -17,15 +17,15 @@ def get_performances(true, pred):
 
 
 def f_measure(true, pred):
-    return f1_score(true, pred, average='binary')
+    return f1_score(true, pred, average='macro')
 
 
 def precision(true, pred):
-    return precision_score(true, pred, average='binary')
+    return precision_score(true, pred, average='macro')
 
 
 def recall(true, pred):
-    return recall_score(true, pred, average='binary')
+    return recall_score(true, pred, average='macro')
 
 
 def get_roc_auc(y, y_pred):
