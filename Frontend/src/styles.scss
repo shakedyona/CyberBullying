@@ -1,0 +1,95 @@
+/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,700');
+
+/* RGB */
+$white: rgba(255, 255, 255, 1);
+$green: rgba(111, 166, 157, 1);
+$blue: rgba(38, 167, 192, 1);
+$gray: rgba(73, 73, 73, 1);
+$light-green: rgba(185, 217, 215, 1);
+
+
+body, html {
+    height: 100%;
+    margin: 0 auto;
+}
+
+body {
+    font-family: 'Montserrat';
+    font-size: 18px;
+}
+
+a {
+    text-decoration: none;
+}
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 1.3em;
+    display: grid;
+    grid-template-columns: auto;
+
+    a {
+        color: $white;
+    }
+}
+
+section {
+    width: 80%;
+    margin: 0 auto;
+    padding: 2em;
+}
+
+.title-medium {
+    font-size: 14pt;
+    font-weight: bold;
+}
+
+.btn {
+    text-transform: uppercase;
+    margin: 4vh auto;
+    font-size: 14px;
+    cursor: pointer;
+    width: 30%;
+    padding: 10px;
+    border: none;
+    text-align: center;
+    text-decoration: none;
+}
+
+.white-text {
+    color: $white;
+}
+
+.green-text {
+    color: $green;
+}
+
+.green-back {
+    background-color: $green;
+}
+
+.light-green-text {
+    color: $light-green;
+}
+
+.light-green-back {
+    background-color: $light-green;
+}
+
+.gray-text {
+    color: $gray;
+}
+
+.gray-back {
+    background-color: $gray;
+}
+
+.blue-text {
+    color: $blue;
+}
+
+.blue-back {
+    background-color: $blue;
+}

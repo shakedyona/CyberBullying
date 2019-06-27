@@ -1,0 +1,19 @@
+header {
+    width: 80%;
+    margin: 0 auto;
+    padding: 1.3em;
+}
+
+#home {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    justify-items: baseline;
+    align-items: center;
+    align-content: space-between;
+}
+
+.section {
+    width: 30%;
+}
