@@ -30,3 +30,8 @@ and call its functions according to the API definition in the project book.
 ## Experiment script
 
 In the source/CyberBullying folder there is a file name 'experiment.py'. You can run it to see outputs of the system's algorithms performance.
+
+## Please note
+
+This repository does not cotain the trained models ans the Word2Vec trained models or corpus. 
+Please contact as for the files.
