@@ -27,3 +27,6 @@ To use the api in python you can import it with
 “from CyberBullying import api”
 and call its functions according to the API definition in the project book.
 
+## Experiment script
+
+In the source/CyberBullying folder there is a file name 'experiment.py'. You can run it to see outputs of the system's algorithms performance.
