@@ -2,7 +2,7 @@
 
 Requirements for the Web Frontend: Node.js
 
-There are 2 folders: ‘CyberBullying’ and ‘Frontend’. ‘CyberBullying’ is the project written in python3.7. 'Frontend' is inside CyberBullying and contain Angular 7 app.
+There are 2 folders: ‘CyberBullying’ and ‘Frontend’. ‘CyberBullying’ is the project written in python3.7. 'Frontend' is inside 'CyberBullying' and contains Angular 7 app.
 
 To install the CyberBullying package and use it’s functionality please write:
 ‘pip install -e path/to/CyberBullying’
