@@ -55,9 +55,12 @@ def traverse(word):
     return word
 
 
-def get_offensive_words():
-    offensive_words = 'offensive_words.csv'
-    df_offensive = pd.read_csv(offensive_words, names=['words'])
+def get_offensive_words(offensive_words_file='offensive_words.csv'):
+    """
+    get a list of offensive word from offensive words file
+    :return:
+    """
+    df_offensive = pd.read_csv(offensive_words_file, names=['words'])
     offensive = df_offensive['words'].tolist()
     return offensive
 
@@ -104,6 +107,14 @@ def create_stop_words_list(dataframe, threshold):
 
 
 def calculate_distance(a, b, distance_type='euclidean'):
+    """
+    calculate the distance between a and b according to a given type.
+    the default type is euclidean but could be cosine.
+    :param a:
+    :param b:
+    :param distance_type:
+    :return:
+    """
     if distance_type == 'euclidean':
         return distance.euclidean(a, b)
     if distance_type == 'cosine':
@@ -125,9 +136,15 @@ def read_to_df(path='dataNew.csv'):
         raise ValueError
 
 
-def create_csv_from_keepers_files(folder_path = r'keepersData'):
-    path_neg = folder_path + r"/sentences.neg"
-    path_pos = folder_path + r"/sentences.pos"
+def create_dataframe_from_keepers_files(folder_path =r'keepersData'):
+    """
+    keeperes sends 2 files - one for the negative sentences and one for positive sentences.
+    this function get the directory of those 2 files and convert them to the correct data frame
+    :param folder_path:
+    :return: dataframe
+    """
+    path_neg = folder_path + r"/neg.neg"
+    path_pos = folder_path + r"/pos.pos"
     cols = ['id', 'text', 'cb_level']
     df_neg = pd.DataFrame(columns=cols)
     df_pos = pd.DataFrame(columns=cols)
@@ -146,10 +163,21 @@ def create_csv_from_keepers_files(folder_path = r'keepersData'):
 
 
 def save_model(model, path='outputs/model.pkl'):
+    """
+    save models to a pkl file
+    :param model:
+    :param path:
+    :return:
+    """
     joblib.dump(model, path)
 
 
 def get_model(path='outputs/model.pkl'):
+    """
+    return a model from a pkl file
+    :param path:
+    :return:
+    """
     path_object = pathlib.Path(path)
     if path_object.exists():
         return joblib.load(path)
@@ -157,18 +185,36 @@ def get_model(path='outputs/model.pkl'):
 
 
 def create_list_of_models():
+    """
+    return list of tuples where in the 0 index is the model name and in the 1 index is the machine learning model itself
+    :return:
+    """
     return [('NB', nb.NaiveBayes().model), ('RF', rf.RandomForest().model), ('XGB', xgb.XGBoost().model)]
 
 
 def save_picture(path):
+    """
+    save plot to a file
+    :param path:
+    :return:
+    """
     plt.savefig(path)
 
 
 def clear_plot():
+    """
+    clear the plt from plot
+    :return:
+    """
     plt.clf()
 
 
 def get_image_string(path):
+    """
+    convert image to a base64 string
+    :param path:
+    :return:
+    """
     with open(path, mode='rb') as file:
         img = file.read()
     return base64.encodebytes(img).decode("utf-8")

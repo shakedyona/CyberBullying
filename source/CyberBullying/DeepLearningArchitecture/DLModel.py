@@ -6,12 +6,20 @@ import matplotlib.pyplot as plt
 
 
 class DLModel:
+    '''
+    this class is a base class for all deep learning models
+    '''
     def __init__(self, dataframe, embedding_matrix=None, model=None):
         self.dataframe = dataframe
         self.embedding_matrix = embedding_matrix
         self.model = model
 
     def create_embedding_matrix(self, model):
+        '''
+        create matrix from all word2vec vectors model
+        :param model:
+        :return:
+        '''
         if self.embedding_matrix is not None:
             return
         embedding_matrix = np.zeros((len(model.wv.vocab), 100))
@@ -24,12 +32,20 @@ class DLModel:
         return embedding_matrix
 
     def word2vec_embedding_layer(self):
+        '''
+        create embedding layer from the word2vec embedding matrix
+        :return:
+        '''
         layer = Embedding(input_dim=self.embedding_matrix.shape[0],
                           output_dim=self.embedding_matrix.shape[1],
                           weights=[self.embedding_matrix])
         return layer
 
     def create_data_input(self):
+        '''
+        create data input to deep learning models from the text
+        :return:
+        '''
         posts = self.dataframe['text'].tolist()
         t = Tokenizer()
         t.fit_on_texts(posts)
@@ -40,6 +56,16 @@ class DLModel:
         return pad_sequences(encoded_docs, maxlen=max_length, padding='post')
 
     def print_evaluation(self, history, X_train, y_train, X_test, y_test, verbose=False):
+        '''
+        print the accuracy for train set and test set
+        :param history:
+        :param X_train:
+        :param y_train:
+        :param X_test:
+        :param y_test:
+        :param verbose:
+        :return:
+        '''
         (loss, accuracy, mae,  mse) = self.model.evaluate(X_train, y_train, verbose=verbose)
         print("Training Accuracy: {:.4f}".format(accuracy))
         (loss, accuracy, mae, mse) = self.model.evaluate(X_test, y_test, verbose=verbose)
@@ -48,6 +74,11 @@ class DLModel:
 
 
 def plot_history(history):
+    '''
+    plot a graph from the train model history data
+    :param history:
+    :return:
+    '''
     plt.style.use('ggplot')
     acc = history.history['acc']
     val_acc = history.history['val_acc']

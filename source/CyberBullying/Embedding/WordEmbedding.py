@@ -21,3 +21,14 @@ def create_our_corpus(inp='corpus.csv', outp='corpus.txt'):
         for row in readCSV:
             txtFile.write(' '.join(row))
     print('done..')
+
+
+def create_keepers_corpus(inp_neg, inp_pos, out='keepers_corpus.txt'):
+    with open(inp_neg) as negfile, open(inp_pos) as posfile, open(out, 'w') as outfile:
+        neg_lines = negfile.readlines()
+        pos_lines = posfile.readlines()
+        for line in neg_lines:
+            outfile.write(line)
+        for line in pos_lines:
+            outfile.write(line)
+    print('done..')

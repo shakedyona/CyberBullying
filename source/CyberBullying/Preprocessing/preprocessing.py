@@ -1,11 +1,11 @@
 from nltk.tokenize import word_tokenize
 import re
-import pandas as pd
 
 
 def preprocess(df):
     """
-    get a dataframe - keepersData and preprocess its data and return the result dataframe
+    get a dataframe and preprocess its data and return the result dataframe
+    the given dataframe should have a text column and an id column
     :param df: dataframe
     :return clean_df: dataframe
     """

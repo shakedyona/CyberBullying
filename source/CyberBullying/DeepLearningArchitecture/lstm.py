@@ -4,10 +4,17 @@ from source.CyberBullying.DeepLearningArchitecture.DLModel import DLModel
 
 
 class lstm(DLModel):
+    """
+    This class handle the creation compilation and functionality of LSTM model
+    """
     def __init__(self, dataframe, embedding_matrix=None, model=None):
         super().__init__(dataframe, embedding_matrix, model)
 
     def create_model(self):
+        """
+        build the lstm model with keras sequential layers
+        :return:
+        """
         model = Sequential()
         model.add(self.word2vec_embedding_layer())
         model.add(layers.LSTM(self.embedding_matrix.shape[1], dropout=0.2, recurrent_dropout=0.2))
@@ -21,6 +28,17 @@ class lstm(DLModel):
         return model
 
     def train(self, x_train, y_train, x_test, y_test, epochs=30, batch_size=10, verbose=True):
+        """
+        train lstm model with a given train set and return the history data of all the epochs
+        :param x_train:
+        :param y_train:
+        :param x_test:
+        :param y_test:
+        :param epochs:
+        :param batch_size:
+        :param verbose:
+        :return:
+        """
         history = self.model.fit(x_train, y_train,
                                  epochs=epochs,
                                  verbose=verbose,
@@ -29,7 +47,12 @@ class lstm(DLModel):
         return history
 
     def predict(self, X):
-        pass
+        """
+        predict a given set target class with lstm model
+        :param X:
+        :return:
+        """
+        return self.model.predict(X)
 
 
 
