@@ -7,6 +7,14 @@ SOURCE = os.path.abspath(os.path.join(__file__, '../../../'))
 
 class Predict(base_handler.BaseHandler):
     def post(self):
+        """
+        HTTP POST method get 'post' and 'explainability' as body arguments
+        'post' should be an Hebrew text (string) to classify
+        'explainability' should be boolean where true is a request to include explanation of classification
+        and false otherwise
+        return class: 1 if the post is offensive and class: 0 it its not offensive
+        :return:
+        """
         post = self.body_argument('post')
         explain = self.body_argument('explainability')
 
