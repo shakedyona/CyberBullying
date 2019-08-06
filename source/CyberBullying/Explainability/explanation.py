@@ -6,6 +6,12 @@ SOURCE = os.path.abspath(os.path.join(__file__, '../../'))
 
 
 def explain_model(model, X):
+    """
+    This function gets a trained model and the X values after the features extraction.
+    This function is responsible for explaining the model using the SHAP library.
+    The output of the function is SHAP plots : summary plot, summary plot bar, dependence plot.
+    The function is run on all model observations.
+    """
     # Visualization for feature importance with SHAP (global)
     logger = Logger.get_logger_instance()
     shap.initjs()
@@ -26,6 +32,12 @@ def explain_model(model, X):
 
 
 def explain_class(model,  X):
+    """
+    This function gets a trained model and the X values after the features extraction.
+    This function is responsible for explaining the model using the SHAP library.
+    The output of the function is SHAP force plot.
+    The function gives results on a single prediction observation.
+    """
     logger = Logger.get_logger_instance()
     shap.initjs()
     explainer = shap.TreeExplainer(model)

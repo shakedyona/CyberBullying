@@ -4,6 +4,12 @@ import pandas as pd
 
 
 def run_baseline(tagged_df):
+    """
+    This function is responsible for running the baseline model.
+    The function receives the tagged data and returns the classification of each record in the data.
+    The baseline model returns classification 1 (offensive) if an abusive word exists from an abusive dictionary,
+    otherwise classification 0 (non-offensive).
+    """
     offensive = utils.get_offensive_words()
     df_compare = pd.DataFrame(columns=['Text', 'Algorithm classify', 'Original classify'])
     for index, row in tagged_df.iterrows():
