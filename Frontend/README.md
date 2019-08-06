@@ -1,0 +1,1 @@
+This is an Angular app that connect to our web service backend. Built to demonstrate the use of the module we developed

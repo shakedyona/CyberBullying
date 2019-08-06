@@ -1,0 +1,36 @@
+<form class="container" [formGroup]="classificationForm" (ngSubmit)="onSubmit()">
+  <div id="input-section">
+    <div class="small-title">Text to classify: </div>
+    <textarea type="text" formControlName="post" rows="5" cols="120"></textarea>
+    <span *ngIf="classificationForm.controls.post.errors && submitted" class="error">
+        required
+      </span>
+  </div>
+  <div class="check-section">
+      <input type="checkbox" (change)="toExplain($event)"/>
+      Include explanation of classification
+  </div>
+  <div id="btn-section">
+    <input class="btn blue-back white-text" type="submit" value="Classify" />
+  </div>
+  <div id="result-section" *ngIf="submitted">
+    <div *ngIf="failure" class="error">
+      Something went wrong :(
+    </div>
+    <div *ngIf="!failure && resultClass === null && !classificationForm.controls.post.errors && !submitted">
+        <h3>Please wait..</h3>
+    </div>
+    <div *ngIf="!failure && resultClass !== null">
+      <h1 class="blue-text">results:</h1>
+      <div *ngIf="resultClass == 1">
+        <h4>This content is offensive.</h4>
+        <img width="100%" *ngIf="resultExplain" [src]="resultExplain" />
+      </div>
+      <div *ngIf="resultClass == 0">
+          <h4>This content is not offensive.</h4>
+          <img width="100%" *ngIf="resultExplain" [src]="resultExplain" />
+        </div>
+    </div>
+  </div>
+</form>
+
