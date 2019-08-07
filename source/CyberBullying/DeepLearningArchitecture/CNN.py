@@ -7,7 +7,7 @@ from source.CyberBullying.DeepLearningArchitecture.DLModel import DLModel
 
 class CNN(DLModel):
     '''
-    This class handle the creation compilation and functionality of CNN model
+    This class handles the creation compilation and functionality of CNN model
     '''
     def __init__(self, dataframe, embedding_matrix=None, model=None):
         super().__init__(dataframe, embedding_matrix, model)

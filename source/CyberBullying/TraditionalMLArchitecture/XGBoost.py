@@ -5,7 +5,13 @@ import xgboost as xgb
 
 
 class XGBoost(MLModel):
+    """
+    This class handles the creation compilation and functionality of XGBoost model
+    """
     def __init__(self):
+        """
+        creates a XGBoost classifier with parameters
+        """
         super().__init__()
         self.model = xgb.XGBClassifier(objective='binary:logistic', max_depth=8, learning_rate=0.001,
                                        n_estimators=150, subsample=0.3, scale_pos_weight=1)
@@ -13,15 +19,32 @@ class XGBoost(MLModel):
 
 
     def train(self, x_train, y_train):
+        """
+        trains XGBoost model with fit operation
+        :param x_train:
+        :param y_train:
+        :return:
+        """
         self.bst = self.model.fit(x_train, y_train)
 
 
     def predict(self, x_test):
+        """
+        predicts probabilities for a given test set
+        :param x_test:
+        :return:
+        """
         y_pred = self.model.predict_proba(x_test)[:, 1]
         return y_pred
 
 
     def grid_search(self, x_train, y_train):
+        """
+        perform a Grid Search to find the parameters that will give the best performance
+        :param x_train:
+        :param y_train:
+        :return:
+        """
         classifier = xgb.XGBClassifier(objective='binary:logistic', max_depth=10, learning_rate=0.01,
                                        n_estimators=200, subsample=0.3, scale_pos_weight=1)
         grid_param = {
@@ -39,6 +62,13 @@ class XGBoost(MLModel):
 
 
     def cross_validation(self, x_train, y_train, params=None):
+        """
+        using cross validation in the XGBoost model to find value of the parameter 'best number of rounds'
+        :param x_train:
+        :param y_train:
+        :param params:
+        :return:
+        """
         if params is None:
             params = {'max_depth': 10, 'learning_rate': 0.01,
                       'objective': 'binary:logistic', 'scale_pos_weight': 1,
@@ -49,4 +79,8 @@ class XGBoost(MLModel):
 
 
     def get_booster(self):
+        """
+        returns the booster
+        :return:
+        """
         return self.bst

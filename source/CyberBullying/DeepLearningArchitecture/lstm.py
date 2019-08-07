@@ -5,7 +5,7 @@ from source.CyberBullying.DeepLearningArchitecture.DLModel import DLModel
 
 class lstm(DLModel):
     """
-    This class handle the creation compilation and functionality of LSTM model
+    This class handles the creation compilation and functionality of LSTM model
     """
     def __init__(self, dataframe, embedding_matrix=None, model=None):
         super().__init__(dataframe, embedding_matrix, model)
@@ -29,7 +29,7 @@ class lstm(DLModel):
 
     def train(self, x_train, y_train, x_test, y_test, epochs=30, batch_size=10, verbose=True):
         """
-        train lstm model with a given train set and return the history data of all the epochs
+        train LSTM model with a given train set and return the history data of all the epochs
         :param x_train:
         :param y_train:
         :param x_test:
