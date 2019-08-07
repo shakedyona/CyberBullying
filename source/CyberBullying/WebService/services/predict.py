@@ -12,7 +12,9 @@ class Predict(base_handler.BaseHandler):
         'post' should be an Hebrew text (string) to classify
         'explainability' should be boolean where true is a request to include explanation of classification
         and false otherwise
-        return class: 1 if the post is offensive and class: 0 it its not offensive
+        the request should be sent after 'train' occurs
+        or if all the necessary models are saved in the 'output' directory
+        return class: 1 if the post is offensive and class: 0 if its not offensive
         :return:
         """
         post = self.body_argument('post')
