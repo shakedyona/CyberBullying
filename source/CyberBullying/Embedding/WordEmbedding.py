@@ -3,6 +3,12 @@ import csv
 
 
 def create_wiki_corpus(inp="hewiki-latest-pages-articles.xml.bz2", outp="wiki3.he.text"):
+    """
+    create file of text line from xml files
+    :param inp:
+    :param outp:
+    :return:
+    """
     print("Starting to create wiki corpus")
     output = open(outp, 'w')
     space = " "
@@ -16,6 +22,12 @@ def create_wiki_corpus(inp="hewiki-latest-pages-articles.xml.bz2", outp="wiki3.h
 
 
 def create_our_corpus(inp='corpus.csv', outp='corpus.txt'):
+    """
+    create text file from csv file
+    :param inp:
+    :param outp:
+    :return:
+    """
     with open(inp) as csvfile, open(outp, 'w') as txtFile:
         readCSV = csv.reader(csvfile, delimiter=',')
         for row in readCSV:
@@ -24,6 +36,13 @@ def create_our_corpus(inp='corpus.csv', outp='corpus.txt'):
 
 
 def create_keepers_corpus(inp_neg, inp_pos, out='keepers_corpus.txt'):
+    """
+    create one text file from all the post in negative text file and positive text file from 'Keepers'
+    :param inp_neg:
+    :param inp_pos:
+    :param out:
+    :return:
+    """
     with open(inp_neg) as negfile, open(inp_pos) as posfile, open(out, 'w') as outfile:
         neg_lines = negfile.readlines()
         pos_lines = posfile.readlines()
